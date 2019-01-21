@@ -24,11 +24,6 @@ public abstract class AlmondLinear extends LinearOpMode
     public int rbEnc = 0;
     public int rfEnc = 0;
 
-
-    public static final int TICKS_PER_REVOLUTION = 1120;
-    public static final int WHEEL_DIAMETER_IN_INCHES = 4;
-    public static final double TICKS_PER_INCH =TICKS_PER_REVOLUTION/(Math.PI*WHEEL_DIAMETER_IN_INCHES);
-    public static final double TICKS_IN_INCH_EMPIRICAL = 0;
     public float currentAngle;
     public float lastAngle;
     // Gyro variable declaration
