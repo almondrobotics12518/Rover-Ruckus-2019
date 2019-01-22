@@ -9,14 +9,9 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.control.constants.DriveConstants;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.subsystems.drivetrains.direction;
-
-import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_INCH;
+import org.firstinspires.ftc.teamcode.control.motion.PID;
 
 public abstract class AlmondLinear extends LinearOpMode
 {
@@ -164,47 +159,84 @@ public abstract class AlmondLinear extends LinearOpMode
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void PIDDrive(int inches,direction dir){
+    public void PIDDrive(int lf,int lb, int rf, int rb){
+        double kp = 0.002;
+        double ki = 0;
+        double kd = 0;
+        double feedForward = 0.05;
+        double powerLf;
+        double powerLb;
+        double powerRf;
+        double powerRb;
         double tarLf;
         double tarLb;
         double tarRf;
         double tarRb;
-        int errorLf;
-        int errorLb;
-        int errorRf;
-        int errorRb;
-        int lastErrorLf;
-        int lastErrorLb;
-        int lastErrorRf;
-        int lastErrorRb;
-        int errorTLf;
-        int errorTLb;
-        int errorTRf;
-        int errorTRb;
-        double ticks = inches * TICKS_PER_INCH;
+        double errorLf;
+        double errorLb;
+        double errorRf;
+        double errorRb;
+        double lastErrorLf=0;
+        double lastErrorLb=0;
+        double lastErrorRf=0;
+        double lastErrorRb=0;
+        double errorTLf=0;
+        double errorTLb=0;
+        double errorTRf=0;
+        double errorTRb=0;
+        double maxPower;
 
-        tarLf = 0;
-        tarLb = 0;
-        tarRf = 0;
-        tarRb = 0;
-
-        switch(dir){
-            case FORWARD: tarLf = ticks; tarLb = ticks; tarRf = ticks; tarRb = ticks;
-                break;
-            case BACKWARD: tarLf = -ticks; tarLb = -ticks; tarRf = -ticks; tarRb = -ticks;
-                break;
-            case LEFT: tarLf = ticks; tarLb = -ticks; tarRf = -ticks; tarRb = ticks;
-                break;
-            case RIGHT: tarLf = -ticks; tarLb = ticks; tarRf = ticks; tarRb = -ticks;
-                break;
-        }
+        tarLf = leftFront.getCurrentPosition()+lf;
+        tarLb = leftBack.getCurrentPosition()+lb;
+        tarRf = rightFront.getCurrentPosition()+rf;
+        tarRb = rightBack.getCurrentPosition()+rb;
 
         while(opModeIsActive()&&(Math.abs(leftFront.getCurrentPosition()-tarLf)>20||
                 Math.abs(rightFront.getCurrentPosition()-tarRf)>20 ||
                 Math.abs(leftBack.getCurrentPosition()-tarLb)>20 ||
                 Math.abs(rightBack.getCurrentPosition()-tarRb)>20)){
+            maxPower = 1;
+
+            errorLf = tarLf - leftFront.getCurrentPosition();
+            errorLb = tarLb - leftBack.getCurrentPosition();
+            errorRf = tarRf - rightFront.getCurrentPosition();
+            errorRb = tarRb - rightBack.getCurrentPosition();
+
+            errorTLf += errorLf;
+            errorTLb += errorLb;
+            errorTRf += errorRf;
+            errorTRb += errorRb;
+
+            powerLf = PID.calculate(kp,ki,kd,errorLf,errorTLf,lastErrorLf,200,20);
+            powerLb = PID.calculate(kp,ki,kd,errorLb,errorTLb,lastErrorLb,200,20);
+            powerRf = PID.calculate(kp,ki,kd,errorRf,errorTRf,lastErrorRf,200,20);
+            powerRb = PID.calculate(kp,ki,kd,errorRb,errorTRb,lastErrorRb,200,20);
+
+            powerLf+=feedForward*(powerLf/Math.abs(powerLf));
+            powerLb+=feedForward*(powerLb/Math.abs(powerLb));
+            powerRf+= feedForward*(powerRf/Math.abs(powerRf));
+            powerRb += feedForward*(powerRb/Math.abs(powerRb));
+
+            if(Math.abs(powerLf)>maxPower){powerLf/=Math.abs(powerLf); powerLf *= maxPower;}
+            if(Math.abs(powerLb)>maxPower){powerLb/=Math.abs(powerLb); powerLb *= maxPower;}
+            if(Math.abs(powerRf)>maxPower){powerRf/=Math.abs(powerRf); powerRf *= maxPower;}
+            if(Math.abs(powerRb)>maxPower){powerRb/=Math.abs(powerRb); powerRb *= maxPower;}
+
+            setPower(powerLf,powerLb,powerRf,powerRb);
+
+            lastErrorLb = errorLb;
+            lastErrorLf = errorLf;
+            lastErrorRf = errorRf;
+            lastErrorRb = errorRb;
+
+            telemetry.addData("Left Front Power",leftFront.getPower());
+            telemetry.addData("Left Back Power",leftBack.getPower());
+            telemetry.addData("Right Front Power",rightFront.getPower());
+            telemetry.addData("Right Back Power",rightBack.getPower());
+            telemetry.update();
 
         }
+        setPowerAll(0);
     }
 
 

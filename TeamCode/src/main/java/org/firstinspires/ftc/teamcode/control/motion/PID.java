@@ -7,10 +7,10 @@ package org.firstinspires.ftc.teamcode.control.motion;
  *
  */
 
-public class PIDCalculate {
+public class PID {
 
-    public double calculate(double kp, double ki, double kd, double error, double errorT, double lastError, double integralZone, double zeroZone){
-        double control;
+    public static double calculate(double kp, double ki, double kd, double error, double errorT, double lastError, double integralZone, double zeroZone){
+        double control = 0;
         double proportion = kp*error;
         double integral = ki*errorT;
         double derivative = kd*(error-lastError);
@@ -28,7 +28,8 @@ public class PIDCalculate {
             derivative = 0;
             integral = 0;
         }
-        control = proportion + integral + derivative;
+
+        control = proportion + integral + derivative ;
 
         return control;
     }

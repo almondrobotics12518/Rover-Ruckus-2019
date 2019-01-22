@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
-@Autonomous(name="Lead Screw Reset",group="set up")
+@Autonomous(name="Lead Screw Reset",group="auto")
 public class LeadScrewReset extends AlmondLinear {
 
     @Override
