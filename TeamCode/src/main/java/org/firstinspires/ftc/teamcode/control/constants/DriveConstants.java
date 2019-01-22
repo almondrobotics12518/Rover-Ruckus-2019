@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.control.constants;
 
 /**
  * Class that stores constants for drivetrain control
- * Created by Theron on 1/21/2019
+ * Created by Ronnie on 1/21/2019
  */
 
 public class DriveConstants {

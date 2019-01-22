@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.subsystems.drivetrains;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_INCH;
+
 public class MecanumDrive {
     private DcMotor lf;
     private DcMotor lb;
@@ -19,6 +21,8 @@ public class MecanumDrive {
         rf = rightFront;
         rb = rightBack;
     }
+
+
 
     /*
     This method is used to set the power of each of the motors.

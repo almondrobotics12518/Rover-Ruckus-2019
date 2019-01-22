@@ -38,7 +38,7 @@ public class DepotSideMain extends AlmondLinear
             telemetry.addData("Status","Starting lead screw");
             telemetry.update();
             lScrew.setPower(1);
-            Thread.sleep(10000);
+            Thread.sleep(8000);
             telemetry.addData("Status","Out of sleep");
             telemetry.update();
             lScrew.setPower(0);

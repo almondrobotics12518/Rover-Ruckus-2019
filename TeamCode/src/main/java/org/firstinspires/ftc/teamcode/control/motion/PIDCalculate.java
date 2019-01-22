@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.control.motion;
 
 /**
  *
- * Class to calculate PID values;
- * Created by Theron on 1/21/19
+ * Class to calculate PID values
+ * Created by Ronnie on 1/21/19
  *
  */
 
@@ -21,10 +21,13 @@ public class PIDCalculate {
         }
 
         if(Math.abs(error) < zeroZone){
+            return 0;
+        }
+
+        if(error==0){
             derivative = 0;
             integral = 0;
         }
-
         control = proportion + integral + derivative;
 
         return control;

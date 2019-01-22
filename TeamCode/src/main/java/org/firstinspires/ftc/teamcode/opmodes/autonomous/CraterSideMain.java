@@ -50,7 +50,7 @@ public class CraterSideMain extends AlmondLinear
             // Start the detector!
 
             lScrew.setPower(1); // Robot lowers
-            sleep(10000);
+            sleep(8000);
             lScrew.setPower(0);
 
             detector.enable();

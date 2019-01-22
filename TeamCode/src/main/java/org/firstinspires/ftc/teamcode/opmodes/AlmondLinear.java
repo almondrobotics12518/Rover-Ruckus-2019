@@ -14,6 +14,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrains.direction;
+
+import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_INCH;
 
 public abstract class AlmondLinear extends LinearOpMode
 {
@@ -159,6 +162,49 @@ public abstract class AlmondLinear extends LinearOpMode
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void PIDDrive(int inches,direction dir){
+        double tarLf;
+        double tarLb;
+        double tarRf;
+        double tarRb;
+        int errorLf;
+        int errorLb;
+        int errorRf;
+        int errorRb;
+        int lastErrorLf;
+        int lastErrorLb;
+        int lastErrorRf;
+        int lastErrorRb;
+        int errorTLf;
+        int errorTLb;
+        int errorTRf;
+        int errorTRb;
+        double ticks = inches * TICKS_PER_INCH;
+
+        tarLf = 0;
+        tarLb = 0;
+        tarRf = 0;
+        tarRb = 0;
+
+        switch(dir){
+            case FORWARD: tarLf = ticks; tarLb = ticks; tarRf = ticks; tarRb = ticks;
+                break;
+            case BACKWARD: tarLf = -ticks; tarLb = -ticks; tarRf = -ticks; tarRb = -ticks;
+                break;
+            case LEFT: tarLf = ticks; tarLb = -ticks; tarRf = -ticks; tarRb = ticks;
+                break;
+            case RIGHT: tarLf = -ticks; tarLb = ticks; tarRf = ticks; tarRb = -ticks;
+                break;
+        }
+
+        while(opModeIsActive()&&(Math.abs(leftFront.getCurrentPosition()-tarLf)>20||
+                Math.abs(rightFront.getCurrentPosition()-tarRf)>20 ||
+                Math.abs(leftBack.getCurrentPosition()-tarLb)>20 ||
+                Math.abs(rightBack.getCurrentPosition()-tarRb)>20)){
+
+        }
     }
 
 
