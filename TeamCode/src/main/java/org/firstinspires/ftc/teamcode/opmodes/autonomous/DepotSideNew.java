@@ -57,7 +57,7 @@ public class DepotSideNew extends AlmondLinear {
             teamMarker.setPosition(0.4);
             sleep(400);
             driveToDistance(48);
-            
+
             encoderTurn(45);
             switch(position){
                 case LEFT:
