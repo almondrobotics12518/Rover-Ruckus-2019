@@ -8,6 +8,6 @@ import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 public class DepotSideNew extends AlmondLinear {
 
     public void runOpMode() throws InterruptedException {
-        
+
     }
 }
