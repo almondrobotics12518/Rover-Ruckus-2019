@@ -20,7 +20,7 @@ public abstract class AlmondLinear extends LinearOpMode
 {
     public float imuOffset;
 
-    
+
 
     public int lfEnc = 0;
     public int lbEnc = 0;
@@ -171,7 +171,7 @@ public abstract class AlmondLinear extends LinearOpMode
 
     public void encoderTurn(double angle){
         int target = (int)(angle*TICKS_PER_DEGREE);
-        PIDDrive(-target,-target,target,target);
+        PIDDrive(target,target,-target,-target);
     }
 
     public void PIDDrive(int lf,int lb, int rf, int rb){
