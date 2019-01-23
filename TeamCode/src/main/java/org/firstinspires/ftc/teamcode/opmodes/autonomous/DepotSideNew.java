@@ -38,10 +38,10 @@ public class DepotSideNew extends AlmondLinear {
             }
             driveToDistance(20);
             encoderTurn(90);
-            driveToDistance(34);
+            driveToDistance(45.3);
             encoderTurn(45);
-            driveToDistance(-46);
-            driveToDistance(72);
+            driveToDistance(-54);
+            driveToDistance(60);
 
     }
 
