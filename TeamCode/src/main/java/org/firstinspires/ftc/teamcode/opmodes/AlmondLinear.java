@@ -175,9 +175,9 @@ public abstract class AlmondLinear extends LinearOpMode
     }
 
     public void PIDDrive(int lf,int lb, int rf, int rb){
-        double kp = 0.002;
+        double kp = 0.003;
         double ki = 0;
-        double kd = 0;
+        double kd = 0.001;
         double feedForward = 0.05;
         double powerLf;
         double powerLb;
