@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.control.motion.PID;
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
 
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 public class DepotSideNew extends AlmondLinear {
 
     public void runOpMode() throws InterruptedException {
-
+        mineralPosition position = mineralPosition.UNKNOWN;
         hardwareMap();
         setModeRunUsingEncoders();
         teamMarker.setPosition(0.4);
@@ -18,7 +19,10 @@ public class DepotSideNew extends AlmondLinear {
         lScrew.setPower(1);
         sleep(9000);
         lScrew.setPower(0);
-        mineralPosition position = mineralPosition.UNKNOWN;
+        PIDDrive(-300,-300,-300,-300);
+        PIDDrive(500,-500,-500,500);
+        PIDDrive(300,300,300,300);
+
         while(opModeIsActive()&&isRunning)
             switch(scan()){
                 case MIDDLE:
@@ -41,16 +45,19 @@ public class DepotSideNew extends AlmondLinear {
                     driveToDistance(-37);
                     encoderTurn(-30);
                     break;
-
             }
+
             driveToDistance(20);
+
             encoderTurn(90);
             driveToDistance(45.3);
+
             encoderTurn(45);
             driveToDistance(-54);
             teamMarker.setPosition(0.4);
             sleep(400);
             driveToDistance(48);
+            
             encoderTurn(45);
             switch(position){
                 case LEFT:
