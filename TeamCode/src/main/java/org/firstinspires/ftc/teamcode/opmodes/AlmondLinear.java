@@ -13,11 +13,14 @@ import org.firstinspires.ftc.teamcode.control.constants.DriveConstants;
 
 import org.firstinspires.ftc.teamcode.control.motion.PID;
 
+import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_DEGREE;
 import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_INCH;
 
 public abstract class AlmondLinear extends LinearOpMode
 {
     public float imuOffset;
+
+    
 
     public int lfEnc = 0;
     public int lbEnc = 0;
@@ -164,6 +167,11 @@ public abstract class AlmondLinear extends LinearOpMode
     public void driveToDistance(double inches){
         int target = (int)(inches*TICKS_PER_INCH);
         PIDDrive(target,target,target,target);
+    }
+
+    public void encoderTurn(double angle){
+        int target = (int)(angle*TICKS_PER_DEGREE);
+        PIDDrive(-target,-target,target,target);
     }
 
     public void PIDDrive(int lf,int lb, int rf, int rb){
