@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.control.motion;
 
 /**
- *
  * Class to calculate PID values
  * Created by Ronnie on 1/21/19
- *
  */
 
 public class PID {

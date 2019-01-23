@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
+
+
 @Autonomous(name="Depot Side New",group = "auto")
 public class DepotSideNew extends AlmondLinear {
 
@@ -16,20 +18,24 @@ public class DepotSideNew extends AlmondLinear {
         lScrew.setPower(1);
         sleep(9000);
         lScrew.setPower(0);
+        mineralPosition position = mineralPosition.UNKNOWN;
         while(opModeIsActive()&&isRunning)
             switch(scan()){
                 case MIDDLE:
+                    position = mineralPosition.MIDDLE;
                     encoderTurn(90);
                     driveToDistance(32);
                     driveToDistance(-32);
                     break;
                 case LEFT:
+                    position = mineralPosition.LEFT;
                     encoderTurn(60);
                     driveToDistance(37);
                     driveToDistance(-37);
                     encoderTurn(30);
                     break;
                 case RIGHT:
+                    position = mineralPosition.RIGHT;
                     encoderTurn(120);
                     driveToDistance(37);
                     driveToDistance(-37);
@@ -44,7 +50,29 @@ public class DepotSideNew extends AlmondLinear {
             driveToDistance(-54);
             teamMarker.setPosition(0.4);
             sleep(400);
-            driveToDistance(60);
+            driveToDistance(48);
+            encoderTurn(45);
+            switch(position){
+                case LEFT:
+                    driveToDistance(25.5);
+                    encoderTurn(-90);
+                    driveToDistance(10);
+                    break;
+                case MIDDLE:
+                    driveToDistance(34);
+                    encoderTurn(-90);
+                    driveToDistance(10);
+                    break;
+                case RIGHT:
+                    driveToDistance(42.5);
+                    encoderTurn(-90);
+                    driveToDistance(10);
+                    break;
+            }
+            slide.setPower(-1);
+            sleep(800);
+            slide.setPower(0);
+
 
     }
 
