@@ -11,6 +11,7 @@ public class DepotSideNew extends AlmondLinear {
 
         hardwareMap();
         setModeRunUsingEncoders();
+        teamMarker.setPosition(0.4);
         waitForStart();
         lScrew.setPower(1);
         sleep(9000);
@@ -41,6 +42,8 @@ public class DepotSideNew extends AlmondLinear {
             driveToDistance(45.3);
             encoderTurn(45);
             driveToDistance(-54);
+            teamMarker.setPosition(0.4);
+            sleep(400);
             driveToDistance(60);
 
     }
