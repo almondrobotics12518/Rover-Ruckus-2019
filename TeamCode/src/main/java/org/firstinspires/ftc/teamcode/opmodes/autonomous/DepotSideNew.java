@@ -87,14 +87,22 @@ public class DepotSideNew extends AlmondLinear {
         detectorEnable();
         mineralPosition position;
         sleep(100);
-        if(detector.isFound()&&detector.getWidth()>40&&opModeIsActive()){
+        if(detector.isFound()&&detector.getWidth()>30&&opModeIsActive()){
             detector.disable();
             position = mineralPosition.MIDDLE;
+            encoderTurn(90);
+            driveToDistance(20);
+            slide.setPower(-1);
+            sleep(800);
+            slide.setPower(1);
+            sleep(1000);
+            encoderTurn(90);
+
         } else {
             encoderTurn(30);
-            if(detector.isFound()&&detector.getWidth()>40&&opModeIsActive()){
+            if(detector.isFound()&&detector.getWidth()>30&&opModeIsActive()){
                 detector.disable();
-                encoderTurn(-30);
+                driveToDistance(10);
                 position = mineralPosition.RIGHT;
             } else {
                 detector.disable();
