@@ -18,16 +18,9 @@ public class PIDTest extends AlmondLinear {
         hardwareMap();
         setModeRunUsingEncoders();
         double turn = DriveConstants.TICKS_PER_DEGREE * 90;
-        initImu();
+
         waitForStart();
-        float original = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        PIDDrive(-5000,-5000,5000,5000);
-        float end = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        setPowerAll(0);
-        while(opModeIsActive()){
-            telemetry.addData("Start",original);
-            telemetry.addData("End",end);
-            telemetry.update();
-        }
+        encoderTurn(90);
+
     }
 }

@@ -59,7 +59,7 @@ public class CraterSideMain extends AlmondLinear
             driveToPosition(500,-500,-500,500, 1); // Moves towards cube ( right )
             driveToPosition(300,300,300,300,1); // Moves backward
 
-            if(detector.isFound()&&detector.getWidth()>40)
+            if(detector.isFound()&&detector.getWidth()>30)
             {
                 detector.disable();
                 telemetry.addData("Status","Pushing Middle Cube...");

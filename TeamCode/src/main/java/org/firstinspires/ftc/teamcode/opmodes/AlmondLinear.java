@@ -171,13 +171,14 @@ public abstract class AlmondLinear extends LinearOpMode
 
     public void encoderTurn(double angle){
         int target = (int)(angle*TICKS_PER_DEGREE);
+        target+=200;
         PIDDrive(target,target,-target,-target);
     }
 
     public void PIDDrive(int lf,int lb, int rf, int rb){
         double kp = 0.003;
         double ki = 0;
-        double kd = 0.001;
+        double kd = 0.0005;
         double feedForward = 0.05;
         double powerLf;
         double powerLb;
