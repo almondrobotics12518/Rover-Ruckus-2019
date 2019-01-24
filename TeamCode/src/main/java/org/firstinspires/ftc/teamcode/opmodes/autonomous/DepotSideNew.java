@@ -24,28 +24,6 @@ public class DepotSideNew extends AlmondLinear {
         PIDDrive(300,300,300,300);
 
         while(opModeIsActive()&&isRunning)
-            switch(scan()){
-                case MIDDLE:
-                    position = mineralPosition.MIDDLE;
-                    encoderTurn(90);
-                    driveToDistance(32);
-                    driveToDistance(-32);
-                    break;
-                case LEFT:
-                    position = mineralPosition.LEFT;
-                    encoderTurn(60);
-                    driveToDistance(37);
-                    driveToDistance(-37);
-                    encoderTurn(30);
-                    break;
-                case RIGHT:
-                    position = mineralPosition.RIGHT;
-                    encoderTurn(120);
-                    driveToDistance(37);
-                    driveToDistance(-37);
-                    encoderTurn(-30);
-                    break;
-            }
 
             driveToDistance(20);
 
@@ -64,17 +42,14 @@ public class DepotSideNew extends AlmondLinear {
                     driveToDistance(25.5);
                     encoderTurn(-90);
                     driveToDistance(10);
-                    break;
                 case MIDDLE:
                     driveToDistance(34);
                     encoderTurn(-90);
                     driveToDistance(10);
-                    break;
                 case RIGHT:
                     driveToDistance(42.5);
                     encoderTurn(-90);
                     driveToDistance(10);
-                    break;
             }
             slide.setPower(-1);
             sleep(800);
@@ -83,25 +58,4 @@ public class DepotSideNew extends AlmondLinear {
 
     }
 
-    public mineralPosition scan() {
-        detectorEnable();
-        mineralPosition position;
-        sleep(100);
-        if(detector.isFound()&&detector.getWidth()>40&&opModeIsActive()){
-            detector.disable();
-            position = mineralPosition.MIDDLE;
-        } else {
-            encoderTurn(30);
-            if(detector.isFound()&&detector.getWidth()>40&&opModeIsActive()){
-                detector.disable();
-                encoderTurn(-30);
-                position = mineralPosition.RIGHT;
-            } else {
-                detector.disable();
-                encoderTurn(-30);
-                position = mineralPosition.LEFT;
-            }
-        }
-        return position;
-    }
 }
