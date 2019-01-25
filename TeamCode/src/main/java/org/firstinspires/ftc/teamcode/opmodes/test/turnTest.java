@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
+@Autonomous(group = "test",name = "Turn Test")
 public class turnTest extends AlmondLinear {
     public void runOpMode(){
         hardwareMap();
