@@ -9,6 +9,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.control.constants.DriveConstants;
 
 import org.firstinspires.ftc.teamcode.control.motion.PID;
@@ -71,8 +75,9 @@ public abstract class AlmondLinear extends LinearOpMode
 
     public boolean isRunning = true;
     public boolean isAuto = true;
-    /*
-    This method sets all hardwareMaps for hardware devices
+
+    /**
+     * Sets hardwaremap for every motor.
      */
     final public void hardwareMap()
     {
@@ -102,10 +107,12 @@ public abstract class AlmondLinear extends LinearOpMode
         }
     }
 
-    /*
-    The setPower() method sets power to all motors. This is for quality of life to set
-    motor powers more easily.
-    It takes 4 doubles for each of the 4 drivetrain powers.
+    /**
+     * Sets power of each motor
+     * @param lf left front power
+     * @param lb left back power
+     * @param rf right front power
+     * @param rb right back power
      */
     public void setPower(double lf, double lb, double rf, double rb)
     {
@@ -115,14 +122,22 @@ public abstract class AlmondLinear extends LinearOpMode
         rightBack.setPower(rb);
     }
 
+    /**
+     * Sets all motors to the same powers specified by
+     * @param power power sent to motors
+     */
     public void setPowerAll(double power){
         leftFront.setPower(power);
         leftBack.setPower(power);
         rightFront.setPower(power);
         rightBack.setPower(power);
     }
-    /*
-    This method sets all the motors to have the same power based on direction that the robot moves.
+
+    /**
+     * Method that sets power of motors to travel in a
+     * specified direction
+     * @param power velocity or amount of power to motor
+     * @param direction direction of travel (forward,left,right,backward)
      */
     public void setPowerDirection(double power, Direction direction)
     {
@@ -142,21 +157,32 @@ public abstract class AlmondLinear extends LinearOpMode
                 break;
         }
     }
+
+    /**
+     * Stores encoder values as variables.
+     */
     public void updateEncoders(){
         lfEnc = leftFront.getCurrentPosition();
         lbEnc = leftBack.getCurrentPosition();
         rfEnc = rightFront.getCurrentPosition();
         rbEnc = rightBack.getCurrentPosition();
     }
-    //This enum is used by setPowerDirection() to select a direction.
+
+    /**
+     * Enumeration for the 4 cardinal
+     * directions.
+     */
     public enum Direction{
         FORWARD,
         BACK,
         LEFT,
         RIGHT
     }
-    //This method is incomplete and contains a custom move to position that takes similar input to
-    //driveToPosition().
+
+    /**
+     * Sets the run mode of the motors to
+     * RUN_USING_ENCODER
+     */
     public void setModeRunUsingEncoders() {
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -169,11 +195,87 @@ public abstract class AlmondLinear extends LinearOpMode
         PIDDrive(target,target,target,target);
     }
 
+    /**
+     * Turns to a certain angle using encoder ticks.
+     * @param angle target angle
+     */
     public void encoderTurn(double angle){
         int target = (int)(angle*TICKS_PER_DEGREE);
         target+=200;
         PIDDrive(target,target,-target,-target);
     }
+
+    /**
+     * turns to a target angle based on imu sensor.
+     * @param angle target angle
+     */
+    public void turn(double angle){
+
+        double kp=0;
+        double ki=0;
+        double kd=0;
+        double feedForward = 0.05;
+        turnDirection direction;
+
+        double target = (getCurrentAngle() + angle) % 360;
+        double power = 0;
+        double errorR = (target - getCurrentAngle())%360;
+        double errorL = (getCurrentAngle()-target)%360;
+        double error;
+        double errorT = 0;
+        double lastError = 0;
+
+        /*
+        This code determines whether clockwise or counterclockwise is closer.
+         */
+
+        if(errorR>errorL){
+            error = errorL;
+            direction = turnDirection.COUNTERCLOCKWISE;
+        } else {
+            error = errorR;
+            direction = turnDirection.CLOCKWISE;
+        }
+
+        while(opModeIsActive()&&Math.abs(error)<1){
+            if(direction == turnDirection.CLOCKWISE){
+                error = (target - getCurrentAngle())%360;
+                if(error>181){
+                    error-=360;
+                }
+            } else {
+                error = (getCurrentAngle()-target)%360;
+                if(error>181){
+                    error-=360;
+                }
+            }
+
+            power = PID.calculate(kp,ki,kd,error,errorT,lastError,10,1);
+            power += feedForward;
+            if (Math.abs(power)>1){power = power/(Math.abs(power));}
+
+            if(direction == turnDirection.CLOCKWISE){
+                setPower(power,power,-power,-power);
+            } else {
+                setPower(-power,-power,power,power);
+            }
+
+            errorT += error;
+            lastError = error;
+        }
+
+        setPowerAll(0);
+
+    }
+
+    /**
+     * Drives to target encoder position using PID loop.
+     * Also uses built-in velocity PID.
+     * @param lf left front encoder target
+     * @param lb left back encoder target
+     * @param rf right front encoder target
+     * @param rb right back encoder target
+     */
 
     public void PIDDrive(int lf,int lb, int rf, int rb){
         double kp = 0.003;
@@ -256,9 +358,13 @@ public abstract class AlmondLinear extends LinearOpMode
         sleep(100);
     }
 
-    /*
-    This  method is used for moving using encoder values. It takes 4 encoder values for the 4
-    drivetrain motors and moves to target position. It also takes a power value of
+    /**
+     * Drives to target position using built in run to position.
+     * @param lf left front encoder target
+     * @param lb left back encoder target
+     * @param rf right front encoder target
+     * @param rb right back encoder target
+     * @param power the power to send to every motor
      */
     final public void driveToPosition(int lf, int lb, int rf,int rb, double power) {
 
@@ -354,5 +460,14 @@ public abstract class AlmondLinear extends LinearOpMode
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+    }
+
+    public float getCurrentAngle(){
+        return (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle*-1)+180;
+    }
+
+    public enum turnDirection{
+        CLOCKWISE,
+        COUNTERCLOCKWISE
     }
 }
