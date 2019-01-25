@@ -11,8 +11,7 @@ public class Backup extends AlmondLinear {
     public void runOpMode() throws InterruptedException {
         hardwareMap();
         waitForStart();
-        lScrew.setPower(1);
-        sleep(5500);
+        unlatch();
 
     }
 }

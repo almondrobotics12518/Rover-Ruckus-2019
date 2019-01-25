@@ -11,10 +11,14 @@ public class turnTest extends AlmondLinear {
         initImu();
         waitForStart();
         float origin = getCurrentAngle();
-        turn(90);
+        turn(180);
         float end = getCurrentAngle();
-        telemetry.addData("Start",origin);
-        telemetry.addData("End",end);
-        telemetry.update();
+        turn(90);
+        while(opModeIsActive()) {
+            telemetry.addData("Start", origin);
+            telemetry.addData("End", end);
+            telemetry.addData("Current",getCurrentAngle());
+            telemetry.update();
+        }
     }
 }

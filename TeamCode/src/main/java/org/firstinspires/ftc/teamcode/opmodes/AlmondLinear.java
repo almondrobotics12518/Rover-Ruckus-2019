@@ -17,13 +17,16 @@ import org.firstinspires.ftc.teamcode.control.constants.DriveConstants;
 
 import org.firstinspires.ftc.teamcode.control.motion.PID;
 
+import java.security.cert.CertStoreParameters;
+import java.sql.ResultSet;
+
 import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_DEGREE;
 import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_INCH;
 
 public abstract class AlmondLinear extends LinearOpMode
 {
     public float imuOffset;
-
+    public float globalAngle;
 
 
     public int lfEnc = 0;
@@ -211,19 +214,20 @@ public abstract class AlmondLinear extends LinearOpMode
      */
     public void turn(double angle){
 
-        double kp=0;
+        double kp=0.02;
         double ki=0;
         double kd=0;
-        double feedForward = 0.05;
+        double feedForward = 0.1;
         turnDirection direction;
 
-        double target = (getCurrentAngle() + angle) % 360;
-        double power = 0;
+        double target = (globalAngle + angle) % 360;
+        double powerTurn = 0;
         double errorR = (target - getCurrentAngle())%360;
         double errorL = (getCurrentAngle()-target)%360;
         double error;
         double errorT = 0;
         double lastError = 0;
+
 
         /*
         This code determines whether clockwise or counterclockwise is closer.
@@ -237,32 +241,40 @@ public abstract class AlmondLinear extends LinearOpMode
             direction = turnDirection.CLOCKWISE;
         }
 
-        while(opModeIsActive()&&Math.abs(error)<1){
+        while(opModeIsActive()&&Math.abs(error)>1){
             if(direction == turnDirection.CLOCKWISE){
-                error = (target - getCurrentAngle())%360;
-                if(error>181){
+                error = (((target-getCurrentAngle())%360)+360)%360;
+                if(error>270){
                     error-=360;
                 }
             } else {
-                error = (getCurrentAngle()-target)%360;
-                if(error>181){
+                error = (((getCurrentAngle()-target)%360)+360)%360;
+                if(error>270){
                     error-=360;
                 }
             }
 
-            power = PID.calculate(kp,ki,kd,error,errorT,lastError,10,1);
-            power += feedForward;
-            if (Math.abs(power)>1){power = power/(Math.abs(power));}
-
+            powerTurn = PID.calculate(kp,ki,kd,error,errorT,lastError,0,0.5);
+            powerTurn += (powerTurn/Math.abs(powerTurn))*feedForward;
+            if (Math.abs(powerTurn)>1){powerTurn = powerTurn/(Math.abs(powerTurn));}
             if(direction == turnDirection.CLOCKWISE){
-                setPower(power,power,-power,-power);
+                setPower(powerTurn,powerTurn,-powerTurn,-powerTurn);
             } else {
-                setPower(-power,-power,power,power);
+                setPower(-powerTurn,-powerTurn,powerTurn,powerTurn);
             }
 
             errorT += error;
             lastError = error;
+            telemetry.addData("error",error);
+            telemetry.addData("Power Variable",powerTurn);
+            telemetry.addData("Left Front Power",leftFront.getPower());
+            telemetry.addData("Left Back Power",leftBack.getPower());
+            telemetry.addData("Right Front Power",rightFront.getPower());
+            telemetry.addData("Right Back Power",rightBack.getPower());
+            telemetry.addData("Current Angle",getCurrentAngle());
+            telemetry.update();
         }
+        globalAngle += angle;
 
         setPowerAll(0);
 
@@ -433,6 +445,7 @@ public abstract class AlmondLinear extends LinearOpMode
         }
 
 
+        globalAngle = getCurrentAngle();
         telemetry.addData("Status","Done calibrating. Waiting for start.");
         telemetry.update();
     }
@@ -469,5 +482,27 @@ public abstract class AlmondLinear extends LinearOpMode
     public enum turnDirection{
         CLOCKWISE,
         COUNTERCLOCKWISE
+    }
+
+    public void resetLatch(){
+        lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lScrew.setPower(-1);
+        int current = lScrew.getCurrentPosition();
+        while(opModeIsActive()&&lScrew.getCurrentPosition()>-26500+current){
+            telemetry.addData("Position",lScrew.getCurrentPosition());
+            telemetry.update();
+        }
+        lScrew.setPower(0);
+    }
+
+    public void unlatch(){
+        lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        int current = lScrew.getCurrentPosition();
+        lScrew.setPower(1);
+        while(opModeIsActive()&&lScrew.getCurrentPosition() < 26500+current){
+            telemetry.addData("Position",lScrew.getCurrentPosition());
+            
+        }
+        lScrew.setPower(0);
     }
 }
