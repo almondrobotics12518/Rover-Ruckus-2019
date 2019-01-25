@@ -9,6 +9,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.control.constants.DriveConstants;
 
 import org.firstinspires.ftc.teamcode.control.motion.PID;
@@ -173,7 +177,53 @@ public abstract class AlmondLinear extends LinearOpMode
         int target = (int)(angle*TICKS_PER_DEGREE);
         PIDDrive(target,target,-target,-target);
     }
+    public void turn(double angle){
 
+        double kp=0;
+        double ki=0;
+        double kd=0;
+        double feedForward;
+        turnDirection direction;
+
+        double target = (getCurrentAngle() + angle) % 360;
+        double power = 0;
+        double errorR = (target - getCurrentAngle())%360;
+        double errorL = (getCurrentAngle()-target)%360;
+        double error;
+        double errorT = 0;
+        double lastError = 0;
+
+        /*
+        This code determines whether clockwise or counterclockwise is closer.
+         */
+
+        if(errorR>errorL){
+            error = errorL;
+            direction = turnDirection.COUNTERCLOCKWISE;
+        } else {
+            error = errorR;
+            direction = turnDirection.CLOCKWISE;
+        }
+
+        while(opModeIsActive()&&Math.abs(error)<1){
+            if(direction == turnDirection.CLOCKWISE){
+                error = (target - getCurrentAngle())%360;
+            } else {
+                error = (getCurrentAngle()-target)%360;
+            }
+
+            power = PID.calculate(kp,ki,kd,error,errorT,lastError,10,1);
+            if(direction == turnDirection.CLOCKWISE){
+                setPower(power,power,-power,-power);
+            } else {
+                setPower(-power,-power,power,power);
+            }
+
+            errorT += error;
+            lastError = error;
+        }
+
+    }
     public void PIDDrive(int lf,int lb, int rf, int rb){
         double kp = 0.003;
         double ki = 0;
@@ -353,5 +403,14 @@ public abstract class AlmondLinear extends LinearOpMode
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lScrew.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+    }
+
+    public float getCurrentAngle(){
+        return (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle*-1)+180;
+    }
+
+    public enum turnDirection{
+        CLOCKWISE,
+        COUNTERCLOCKWISE
     }
 }
