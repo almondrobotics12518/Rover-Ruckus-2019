@@ -220,9 +220,9 @@ public abstract class AlmondLinear extends LinearOpMode
      */
     public void turn(double angle){
 
-        double kp=0.02;
+        double kp=0.01;
         double ki=0;
-        double kd=0;
+        double kd=0.001;
         double feedForward = 0.1;
         turnDirection direction;
 
