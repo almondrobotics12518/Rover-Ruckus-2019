@@ -40,7 +40,7 @@ public class CraterSideNew extends AlmondLinear{
 
 
             }
-            
+
         detector.disable();
         isRunning = false;
 

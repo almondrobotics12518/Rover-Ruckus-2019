@@ -83,8 +83,8 @@ public class CraterSideMain extends AlmondLinear
 
 
             } else {
-                driveToPosition(1000,1000,-1000,-1000,1); // Moves clockwise
-                sleep(500);
+                    driveToPosition(1000,1000,-1000,-1000,1); // Moves clockwise
+                    sleep(500);
 
                 if(detector.isFound() && detector.getWidth()>30)
                 {
