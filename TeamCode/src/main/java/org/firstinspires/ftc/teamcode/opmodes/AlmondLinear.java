@@ -60,7 +60,8 @@ public abstract class AlmondLinear extends LinearOpMode
         Declare scoring mechanism servos and motors.
         ------------------------------------------- */
 
-    public DcMotor arm;
+    public DcMotor armLeft;
+    public DcMotor armRight;
     public DcMotor slide;
     public CRServo intake;
 
@@ -93,6 +94,10 @@ public abstract class AlmondLinear extends LinearOpMode
         lScrew = hardwareMap.dcMotor.get("LScrew");
         teamMarker = hardwareMap.servo.get("tm");
         slide = hardwareMap.dcMotor.get("Slide");
+        armRight = hardwareMap.dcMotor.get("ArmRight");
+        armLeft = hardwareMap.dcMotor.get("ArmLeft");
+        armRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -108,6 +113,7 @@ public abstract class AlmondLinear extends LinearOpMode
             rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
             rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
         }
+        lScrew.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /**
@@ -484,24 +490,27 @@ public abstract class AlmondLinear extends LinearOpMode
         COUNTERCLOCKWISE
     }
 
-    public void resetLatch(){
+    public void unlatch(){
         lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lScrew.setPower(-1);
         int current = lScrew.getCurrentPosition();
-        while(opModeIsActive()&&lScrew.getCurrentPosition()>-26500+current){
+        int target = current -26800;
+        while(opModeIsActive()&&lScrew.getCurrentPosition()>target){
             telemetry.addData("Position",lScrew.getCurrentPosition());
             telemetry.update();
         }
         lScrew.setPower(0);
     }
 
-    public void unlatch(){
+    public void resetLatch(){
         lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int current = lScrew.getCurrentPosition();
         lScrew.setPower(1);
-        while(opModeIsActive()&&lScrew.getCurrentPosition() < 26500+current){
+        int target = current+26800;
+        while(opModeIsActive()&&lScrew.getCurrentPosition() < target){
             telemetry.addData("Position",lScrew.getCurrentPosition());
-            
+            telemetry.addData("Target",target);
+            telemetry.update();
         }
         lScrew.setPower(0);
     }
