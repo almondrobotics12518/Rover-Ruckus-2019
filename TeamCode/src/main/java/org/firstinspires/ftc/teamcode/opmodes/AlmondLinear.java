@@ -218,11 +218,11 @@ public abstract class AlmondLinear extends LinearOpMode
      * turns to a target angle based on imu sensor.
      * @param angle target angle
      */
-    public void turn(double angle){
+    public void turn(float angle){
 
-        double kp=0.01;
+        double kp=0.02;
         double ki=0;
-        double kd=0.001;
+        double kd=0.000;
         double feedForward = 0.1;
         turnDirection direction;
 
@@ -280,7 +280,7 @@ public abstract class AlmondLinear extends LinearOpMode
             telemetry.addData("Current Angle",getCurrentAngle());
             telemetry.update();
         }
-        globalAngle += angle;
+        globalAngle = (globalAngle+ angle) % 360;
 
         setPowerAll(0);
 
@@ -321,6 +321,7 @@ public abstract class AlmondLinear extends LinearOpMode
         double errorTRf=0;
         double errorTRb=0;
         double maxPower;
+        double origin = leftFront.getCurrentPosition();
 
         tarLf = leftFront.getCurrentPosition()+lf;
         tarLb = leftBack.getCurrentPosition()+lb;
@@ -331,7 +332,7 @@ public abstract class AlmondLinear extends LinearOpMode
                 Math.abs(rightFront.getCurrentPosition()-tarRf)>20 ||
                 Math.abs(leftBack.getCurrentPosition()-tarLb)>20 ||
                 Math.abs(rightBack.getCurrentPosition()-tarRb)>20)){
-            maxPower = 1;
+            maxPower = Math.abs((leftFront.getCurrentPosition()-origin)/200)+feedForward;
 
             errorLf = tarLf - leftFront.getCurrentPosition();
             errorLb = tarLb - leftBack.getCurrentPosition();
@@ -494,7 +495,7 @@ public abstract class AlmondLinear extends LinearOpMode
         lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lScrew.setPower(-1);
         int current = lScrew.getCurrentPosition();
-        int target = current -26800;
+        int target = current -25000;
         while(opModeIsActive()&&lScrew.getCurrentPosition()>target){
             telemetry.addData("Position",lScrew.getCurrentPosition());
             telemetry.update();
@@ -506,7 +507,7 @@ public abstract class AlmondLinear extends LinearOpMode
         lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int current = lScrew.getCurrentPosition();
         lScrew.setPower(1);
-        int target = current+26800;
+        int target = current+25000;
         while(opModeIsActive()&&lScrew.getCurrentPosition() < target){
             telemetry.addData("Position",lScrew.getCurrentPosition());
             telemetry.addData("Target",target);

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
-@Autonomous(group="opmodes",name="auto")
+@Autonomous(group="auto",name="Back-Up")
 public class Backup extends AlmondLinear {
     @Override
     public void runOpMode() throws InterruptedException {
