@@ -11,9 +11,8 @@ public class turnTest extends AlmondLinear {
         initImu();
         waitForStart();
         float origin = getCurrentAngle();
-        turn(180);
+        PIDDrive(1000,1000,-1000,-1000);
         float end = getCurrentAngle();
-        turn(90);
         while(opModeIsActive()) {
             telemetry.addData("Start", origin);
             telemetry.addData("End", end);

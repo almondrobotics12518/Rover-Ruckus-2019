@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 
 import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_DEGREE;
 import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_INCH;
+import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_REVOLUTION;
 
 public abstract class AlmondLinear extends LinearOpMode
 {
@@ -286,6 +287,10 @@ public abstract class AlmondLinear extends LinearOpMode
 
     }
 
+
+    public void PIDDrive(int lf, int lb, int rf, int rb){
+        PIDDrive(lf,lb,rf,rb,1);
+    }
     /**
      * Drives to target encoder position using PID loop.
      * Also uses built-in velocity PID.
@@ -295,7 +300,7 @@ public abstract class AlmondLinear extends LinearOpMode
      * @param rb right back encoder target
      */
 
-    public void PIDDrive(int lf,int lb, int rf, int rb){
+    public void PIDDrive(int lf,int lb, int rf, int rb,double max){
         double kp = 0.003;
         double ki = 0;
         double kd = 0.0005;
@@ -320,7 +325,7 @@ public abstract class AlmondLinear extends LinearOpMode
         double errorTLb=0;
         double errorTRf=0;
         double errorTRb=0;
-        double maxPower;
+        double maxPower=0;
         double origin = leftFront.getCurrentPosition();
 
         tarLf = leftFront.getCurrentPosition()+lf;
@@ -332,7 +337,12 @@ public abstract class AlmondLinear extends LinearOpMode
                 Math.abs(rightFront.getCurrentPosition()-tarRf)>20 ||
                 Math.abs(leftBack.getCurrentPosition()-tarLb)>20 ||
                 Math.abs(rightBack.getCurrentPosition()-tarRb)>20)){
-            maxPower = Math.abs((leftFront.getCurrentPosition()-origin)/200)+feedForward;
+
+            maxPower += 0.01;
+            if(maxPower>max){
+                maxPower = max;
+            }
+
 
             errorLf = tarLf - leftFront.getCurrentPosition();
             errorLb = tarLb - leftBack.getCurrentPosition();
@@ -372,6 +382,8 @@ public abstract class AlmondLinear extends LinearOpMode
             telemetry.addData("Right Back Power",rightBack.getPower());
             telemetry.update();
 
+
+            sleep(10);
         }
         setPowerAll(0);
         sleep(100);
@@ -386,6 +398,11 @@ public abstract class AlmondLinear extends LinearOpMode
      * @param power the power to send to every motor
      */
     final public void driveToPosition(int lf, int lb, int rf,int rb, double power) {
+
+        lf = (int) (lf*TICKS_PER_REVOLUTION/1680);
+        lb = (int) (lb*TICKS_PER_REVOLUTION/1680);
+        rf = (int) (rf*TICKS_PER_REVOLUTION/1680);
+        rb = (int) (rb*TICKS_PER_REVOLUTION/1680);
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);

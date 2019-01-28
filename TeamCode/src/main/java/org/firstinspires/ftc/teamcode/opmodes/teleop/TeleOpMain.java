@@ -44,8 +44,12 @@ public class TeleOpMain extends LinearOpMode {
 
         // Reversing direction of right side motors
         //leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         armLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -72,14 +76,14 @@ public class TeleOpMain extends LinearOpMode {
             RF = speed * Math.sin(angle)-rightX; // Calculates power for moving for the RF wheel
             RB = speed * Math.cos(angle)-rightX; // Calculates power for moving for the RB wheel
 
-            leftFront.setPower(LF); // Gives power to LF wheels
-            leftBack.setPower(LB); // Gives power to LB wheels
-            rightFront.setPower(RF); // Gives power to RF wheels
-            rightBack.setPower(RB); // Gives power to RB wheels
+            leftFront.setPower(LF * 0.65); // Gives power to LF wheels
+            leftBack.setPower(LB * 0.65); // Gives power to LB wheels
+            rightFront.setPower(RF * 0.65); // Gives power to RF wheels
+            rightBack.setPower(RB * 0.65); // Gives power to RB wheels
 
             lScrew.setPower(gamepad1.right_trigger-gamepad1.left_trigger); // Gives power to the lScrew
 
-            armY = gamepad2.right_stick_y*0.25;
+            armY = gamepad2.right_stick_y*0.35;
             if (Math.abs(armY)==0){
                 armLeft.setPower(0);
                 armRight.setPower(0);
