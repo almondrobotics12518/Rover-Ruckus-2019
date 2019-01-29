@@ -223,9 +223,9 @@ public abstract class AlmondLinear extends LinearOpMode
      */
     public void turn(float angle){
 
-        double kp=0.007;
+        double kp=0.01;
         double ki=0;
-        double kd=0.000;
+        double kd=0.005;
         double feedForward = 0.1;
         turnDirection direction;
 
@@ -250,7 +250,7 @@ public abstract class AlmondLinear extends LinearOpMode
             direction = turnDirection.CLOCKWISE;
         }
 
-        while(opModeIsActive()&&Math.abs(error)>1){
+        while(opModeIsActive()&&Math.abs(error)>0.2){
             if(direction == turnDirection.CLOCKWISE){
                 error = (((target-getCurrentAngle())%360)+360)%360;
                 if(error>270){
@@ -263,7 +263,7 @@ public abstract class AlmondLinear extends LinearOpMode
                 }
             }
 
-            powerTurn = PID.calculate(kp,ki,kd,error,errorT,lastError,0,0.5);
+            powerTurn = PID.calculate(kp,ki,kd,error,errorT,lastError,0,0.2);
             powerTurn += (powerTurn/Math.abs(powerTurn))*feedForward;
             if (Math.abs(powerTurn)>1){powerTurn = powerTurn/(Math.abs(powerTurn));}
             if(direction == turnDirection.CLOCKWISE){
@@ -303,9 +303,9 @@ public abstract class AlmondLinear extends LinearOpMode
      */
 
     public void PIDDrive(int lf,int lb, int rf, int rb,double max){
-        double kp = 0.002;
+        double kp = 0.004;
         double ki = 0;
-        double kd = 0.001;
+        double kd = 0.002;
         double feedForward = 0.03;
         double powerLf;
         double powerLb;
@@ -340,7 +340,7 @@ public abstract class AlmondLinear extends LinearOpMode
                 Math.abs(leftBack.getCurrentPosition()-tarLb)>20 ||
                 Math.abs(rightBack.getCurrentPosition()-tarRb)>20)){
 
-            maxPower += 0.015;
+            maxPower += 0.02;
             if(maxPower>max){
                 maxPower = max;
             }

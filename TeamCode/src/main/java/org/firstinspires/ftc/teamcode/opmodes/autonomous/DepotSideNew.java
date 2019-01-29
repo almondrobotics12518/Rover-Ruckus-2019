@@ -2,106 +2,96 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.control.motion.PID;
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
-
-
-@Autonomous(name="Depot Side New",group = "auto")
+@Autonomous(name = "Depot Side New",group = "auto")
 public class DepotSideNew extends AlmondLinear {
-
-    public void runOpMode() throws InterruptedException {
-        mineralPosition position = mineralPosition.UNKNOWN;
+    public void runOpMode() throws InterruptedException{
         hardwareMap();
         setModeRunUsingEncoders();
-        teamMarker.setPosition(0.4);
-        waitForStart();
-        lScrew.setPower(1);
-        sleep(9000);
-        lScrew.setPower(0);
-        PIDDrive(-300,-300,-300,-300);
-        PIDDrive(500,-500,-500,500);
-        PIDDrive(300,300,300,300);
-
-        while(opModeIsActive()&&isRunning)
-            switch(scan()){
-                case MIDDLE:
-                    position = mineralPosition.MIDDLE;
-                    encoderTurn(90);
-                    driveToDistance(32);
-                    driveToDistance(-32);
-                    break;
-                case LEFT:
-                    position = mineralPosition.LEFT;
-                    encoderTurn(60);
-                    driveToDistance(37);
-                    driveToDistance(-37);
-                    encoderTurn(30);
-                    break;
-                case RIGHT:
-                    position = mineralPosition.RIGHT;
-                    encoderTurn(120);
-                    driveToDistance(37);
-                    driveToDistance(-37);
-                    encoderTurn(-30);
-                    break;
-            }
-
-            driveToDistance(20);
-
-            encoderTurn(90);
-            driveToDistance(45.3);
-
-            encoderTurn(45);
-            driveToDistance(-54);
-            teamMarker.setPosition(0.4);
-            sleep(400);
-            driveToDistance(48);
-
-            encoderTurn(45);
-            switch(position){
-                case LEFT:
-                    driveToDistance(25.5);
-                    encoderTurn(-90);
-                    driveToDistance(10);
-                    break;
-                case MIDDLE:
-                    driveToDistance(34);
-                    encoderTurn(-90);
-                    driveToDistance(10);
-                    break;
-                case RIGHT:
-                    driveToDistance(42.5);
-                    encoderTurn(-90);
-                    driveToDistance(10);
-                    break;
-            }
-            slide.setPower(-1);
-            sleep(800);
-            slide.setPower(0);
-
-
-    }
-
-    public mineralPosition scan() {
-        detectorEnable();
+        teamMarker.setPosition(0.8);
         mineralPosition position;
-        sleep(100);
-        if(detector.isFound()&&detector.getWidth()>40&&opModeIsActive()){
-            detector.disable();
+
+        waitForStart();
+        unlatch();
+        PIDDrive(-150,-150,-150,-150);
+        PIDDrive(250,-250,-250,250);
+        PIDDrive(250,250,250,250);
+        initImu();
+
+        /*
+         * Sampling code that scans and returns a position
+         * for the mineral.
+         *
+         */
+        detectorEnable();
+        if(detector.getWidth()>40&&detector.isFound()){
             position = mineralPosition.MIDDLE;
         } else {
-            encoderTurn(30);
-            if(detector.isFound()&&detector.getWidth()>40&&opModeIsActive()){
-                detector.disable();
-                encoderTurn(-30);
+            turn(30);
+            if(detector.getWidth()>20&&detector.isFound()){
                 position = mineralPosition.RIGHT;
+                turn(-30);
             } else {
-                detector.disable();
-                encoderTurn(-30);
                 position = mineralPosition.LEFT;
+                turn(-30);
             }
         }
-        return position;
+        detector.disable();
+
+
+        /*
+         * Turns based on the position returned by sampling
+         * above.
+         */
+
+        switch(position){
+            case RIGHT:
+                turn(120);
+                slide.setPower(-1);
+                sleep(800);
+                slide.setPower(0);
+                slide.setPower(1);
+                sleep(1000);
+                slide.setPower(0);
+                turn(-30);
+                break;
+            case MIDDLE:
+                turn(90);
+                slide.setPower(-1);
+                sleep(800);
+                slide.setPower(0);
+                slide.setPower(1);
+                sleep(1000);
+                slide.setPower(0);
+                break;
+            case LEFT:
+                turn(60);
+                slide.setPower(-1);
+                sleep(800);
+                slide.setPower(0);
+                slide.setPower(1);
+                sleep(1000);
+                slide.setPower(0);
+                turn(30);
+
+                break;
+        }
+        
+        driveToDistance(10);
+
+        turn(-80);
+        driveToDistance(40);
+        turn(-55);
+        driveToDistance(-48);
+        teamMarker.setPosition(0.4);
+        sleep(400);
+        driveToDistance(58);
+
+        slide.setPower(-1);
+        sleep(800);
+        slide.setPower(0);
+
+
     }
 }
