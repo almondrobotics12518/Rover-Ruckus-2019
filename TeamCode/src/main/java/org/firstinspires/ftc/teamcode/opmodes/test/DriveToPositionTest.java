@@ -10,7 +10,7 @@ public class DriveToPositionTest extends AlmondLinear {
         hardwareMap();
         setModeRunUsingEncoders();
         waitForStart();
-        driveToPosition(5000,5000,5000,5000,1);
+        PIDDrive(1000,1000,1000,1000);
         setPowerAll(0);
         requestOpModeStop();
     }

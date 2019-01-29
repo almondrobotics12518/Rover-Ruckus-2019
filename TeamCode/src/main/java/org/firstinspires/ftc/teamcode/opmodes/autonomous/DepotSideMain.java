@@ -27,6 +27,8 @@ public class DepotSideMain extends AlmondLinear
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         teamMarker.setPosition(0.8);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
         waitForStart();
         while (opModeIsActive() && isRunning)
         {
@@ -35,13 +37,7 @@ public class DepotSideMain extends AlmondLinear
 
 
 
-            telemetry.addData("Status","Starting lead screw");
-            telemetry.update();
-            lScrew.setPower(1);
-            Thread.sleep(8000);
-            telemetry.addData("Status","Out of sleep");
-            telemetry.update();
-            lScrew.setPower(0);
+            unlatch();
 
             telemetry.addData("Status","Starting to drive");
             telemetry.update();

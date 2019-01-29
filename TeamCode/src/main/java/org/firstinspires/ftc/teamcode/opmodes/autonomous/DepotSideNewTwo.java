@@ -9,15 +9,15 @@ public class DepotSideNewTwo extends AlmondLinear {
     public void runOpMode() throws InterruptedException{
         hardwareMap();
         setModeRunUsingEncoders();
-        teamMarker.setPosition(0.4);
+        teamMarker.setPosition(0.8);
 
         waitForStart();
         unlatch();
-        PIDDrive(-200,200,200,-200);
-        PIDDrive(-300,-300,-300,-300);
-        PIDDrive(500,-500,-500,500);
-        PIDDrive(300,300,300,300);
-        encoderTurn(90);
+        PIDDrive(-150,-150,-150,-150);
+        PIDDrive(250,-250,-250,250);
+        PIDDrive(250,250,250,250);
+        initImu();
+        turn(90);
         driveToDistance(12);
 
         slide.setPower(-1);
@@ -27,12 +27,13 @@ public class DepotSideNewTwo extends AlmondLinear {
         sleep(1000);
         slide.setPower(0);
 
-        encoderTurn(-72);
+        turn(-80);
         driveToDistance(40);
-        encoderTurn(-83);
+        turn(-55);
         driveToDistance(-48);
-        teamMarker.setPosition(0.8);
-        driveToDistance(78);
+        teamMarker.setPosition(0.4);
+        sleep(400);
+        driveToDistance(58);
 
         slide.setPower(-1);
         sleep(800);

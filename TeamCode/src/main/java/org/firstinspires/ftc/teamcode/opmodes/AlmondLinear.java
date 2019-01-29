@@ -108,11 +108,13 @@ public abstract class AlmondLinear extends LinearOpMode
 
         if (isAuto)
         {
-            leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        } else {
             rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
             rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        } else {
+
+            leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         }
         lScrew.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
@@ -221,7 +223,7 @@ public abstract class AlmondLinear extends LinearOpMode
      */
     public void turn(float angle){
 
-        double kp=0.02;
+        double kp=0.007;
         double ki=0;
         double kd=0.000;
         double feedForward = 0.1;
@@ -229,8 +231,8 @@ public abstract class AlmondLinear extends LinearOpMode
 
         double target = (globalAngle + angle) % 360;
         double powerTurn = 0;
-        double errorR = (target - getCurrentAngle())%360;
-        double errorL = (getCurrentAngle()-target)%360;
+        double errorR = (target - getCurrentAngle()+360)%360;
+        double errorL = (getCurrentAngle()-target+360)%360;
         double error;
         double errorT = 0;
         double lastError = 0;
@@ -289,7 +291,7 @@ public abstract class AlmondLinear extends LinearOpMode
 
 
     public void PIDDrive(int lf, int lb, int rf, int rb){
-        PIDDrive(lf,lb,rf,rb,1);
+        PIDDrive(lf,lb,rf,rb,0.9);
     }
     /**
      * Drives to target encoder position using PID loop.
@@ -301,10 +303,10 @@ public abstract class AlmondLinear extends LinearOpMode
      */
 
     public void PIDDrive(int lf,int lb, int rf, int rb,double max){
-        double kp = 0.003;
+        double kp = 0.002;
         double ki = 0;
-        double kd = 0.0005;
-        double feedForward = 0.05;
+        double kd = 0.001;
+        double feedForward = 0.03;
         double powerLf;
         double powerLb;
         double powerRf;
@@ -338,7 +340,7 @@ public abstract class AlmondLinear extends LinearOpMode
                 Math.abs(leftBack.getCurrentPosition()-tarLb)>20 ||
                 Math.abs(rightBack.getCurrentPosition()-tarRb)>20)){
 
-            maxPower += 0.01;
+            maxPower += 0.015;
             if(maxPower>max){
                 maxPower = max;
             }
@@ -512,7 +514,7 @@ public abstract class AlmondLinear extends LinearOpMode
         lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lScrew.setPower(-1);
         int current = lScrew.getCurrentPosition();
-        int target = current -25000;
+        int target = current -12500;
         while(opModeIsActive()&&lScrew.getCurrentPosition()>target){
             telemetry.addData("Position",lScrew.getCurrentPosition());
             telemetry.update();
@@ -524,7 +526,7 @@ public abstract class AlmondLinear extends LinearOpMode
         lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int current = lScrew.getCurrentPosition();
         lScrew.setPower(1);
-        int target = current+25000;
+        int target = current+12500;
         while(opModeIsActive()&&lScrew.getCurrentPosition() < target){
             telemetry.addData("Position",lScrew.getCurrentPosition());
             telemetry.addData("Target",target);
