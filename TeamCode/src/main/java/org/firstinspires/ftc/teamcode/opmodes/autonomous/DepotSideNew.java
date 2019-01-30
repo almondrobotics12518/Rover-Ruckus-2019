@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
 @Autonomous(name = "Depot Side New",group = "auto")
 public class DepotSideNew extends AlmondLinear {
-    public void runOpMode() throws InterruptedException{
+    public void runOpMode() throws InterruptedException {
         hardwareMap();
         setModeRunUsingEncoders();
         teamMarker.setPosition(0.8);
@@ -14,9 +14,10 @@ public class DepotSideNew extends AlmondLinear {
 
         waitForStart();
         unlatch();
-        PIDDrive(-100,-100,-100,-100);
-        PIDDrive(250,-250,-250,250);
-        PIDDrive(200,200,200,200);
+        detectorEnable();
+        PIDDrive(-100, -100, -100, -100);
+        PIDDrive(250, -250, -250, 250);
+        PIDDrive(200, 200, 200, 200);
         initImu();
 
         /*
@@ -25,22 +26,26 @@ public class DepotSideNew extends AlmondLinear {
          *
          */
 
-        detectorEnable();
-        if(detector.isFound()){
+
+        if (detector.isFound()) {
+            detector.disable();
             turn(90);
             driveToDistance(20);
             driveToDistance(-10);
             turn(-80);
+
         } else {
             turn(30);
             if(detector.isFound()){
+                detector.disable();
                 turn(60);
                 driveToDistance(10);
                 turn(45);
                 driveToDistance(16);
                 driveToDistance(-16);
-                turn(-125);
+                turn(-130);
             } else {
+                detector.disable();
                 turn(60);
                 driveToDistance(10);
                 turn(-45);
@@ -51,45 +56,18 @@ public class DepotSideNew extends AlmondLinear {
             }
         }
 
-
-
-
-
         /*
          * Turns based on the position returned by sampling
          * above.
          */
 
-        /*
-        switch(position){
-            case MIDDLE:
-                driveToDistance(20);
-                driveToDistance(-10);
-                turn(-80);
-
-                break;
-            case LEFT:
-                driveToDistance(10);
-                turn(-45);
-                driveToDistance(16);
-                driveToDistance(-16);
-                turn(-35);
-                break;
-            case RIGHT:
-                driveToDistance(10);
-                turn(45);
-                driveToDistance(16);
-                driveToDistance(-16);
-                turn(-125);
-        }
-
-        */
         driveToDistance(40);
         turn(-55);
         driveToDistance(-48);
         teamMarker.setPosition(0.4);
         sleep(400);
         driveToDistance(58);
+
 
         /*
         slide.setPower(-1);
@@ -98,5 +76,6 @@ public class DepotSideNew extends AlmondLinear {
         */
 
 
+        }
     }
-}
+

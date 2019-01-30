@@ -225,8 +225,8 @@ public abstract class AlmondLinear extends LinearOpMode
 
         double kp=0.015;
         double ki=0;
-        double kd=0.015;
-        double feedForward = 0.15;
+        double kd=0.02;
+        double feedForward = 0.05;
         turnDirection direction;
 
         double target = (globalAngle + angle) % 360;
