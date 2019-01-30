@@ -14,9 +14,9 @@ public class DepotSideNew extends AlmondLinear {
 
         waitForStart();
         unlatch();
-        PIDDrive(-150,-150,-150,-150);
+        PIDDrive(-100,-100,-100,-100);
         PIDDrive(250,-250,-250,250);
-        PIDDrive(150,150,150,150);
+        PIDDrive(200,200,200,200);
         initImu();
 
         /*
@@ -24,20 +24,35 @@ public class DepotSideNew extends AlmondLinear {
          * for the mineral.
          *
          */
+
         detectorEnable();
         if(detector.isFound()){
-            position = mineralPosition.MIDDLE;
+            turn(90);
+            driveToDistance(20);
+            driveToDistance(-10);
+            turn(-80);
         } else {
             turn(30);
             if(detector.isFound()){
-                position = mineralPosition.RIGHT;
-                turn(-30);
+                turn(60);
+                driveToDistance(10);
+                turn(45);
+                driveToDistance(16);
+                driveToDistance(-16);
+                turn(-125);
             } else {
-                position = mineralPosition.LEFT;
-                turn(-30);
+                turn(60);
+                driveToDistance(10);
+                turn(-45);
+                driveToDistance(16);
+                driveToDistance(-16);
+                turn(-35);
+
             }
         }
-        detector.disable();
+
+
+
 
 
         /*
@@ -45,37 +60,30 @@ public class DepotSideNew extends AlmondLinear {
          * above.
          */
 
-
-        turn(90);
+        /*
         switch(position){
             case MIDDLE:
-                driveToDistance(10);
-                slide.setPower(-1);
-                sleep(800);
-                slide.setPower(1);
-                sleep(1000);
+                driveToDistance(20);
+                driveToDistance(-10);
                 turn(-80);
+
                 break;
             case LEFT:
                 driveToDistance(10);
                 turn(-45);
-                slide.setPower(-1);
-                sleep(800);
-                slide.setPower(1);
-                sleep(1000);
+                driveToDistance(16);
+                driveToDistance(-16);
                 turn(-35);
                 break;
             case RIGHT:
                 driveToDistance(10);
                 turn(45);
-                slide.setPower(-1);
-                sleep(800);
-                slide.setPower(1);
-                sleep(1000);
+                driveToDistance(16);
+                driveToDistance(-16);
                 turn(-125);
         }
 
-
+        */
         driveToDistance(40);
         turn(-55);
         driveToDistance(-48);
@@ -83,9 +91,11 @@ public class DepotSideNew extends AlmondLinear {
         sleep(400);
         driveToDistance(58);
 
+        /*
         slide.setPower(-1);
         sleep(800);
         slide.setPower(0);
+        */
 
 
     }
