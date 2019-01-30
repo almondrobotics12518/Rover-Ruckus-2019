@@ -283,7 +283,7 @@ public abstract class AlmondLinear extends LinearOpMode
             telemetry.addData("Current Angle",getCurrentAngle());
             telemetry.update();
         }
-        globalAngle = (globalAngle+ angle) % 360;
+        globalAngle = (((globalAngle+ angle) % 360)+360)%360;
 
         setPowerAll(0);
 

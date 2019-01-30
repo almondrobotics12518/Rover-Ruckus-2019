@@ -45,42 +45,37 @@ public class DepotSideNew extends AlmondLinear {
          * above.
          */
 
+
+        turn(90);
         switch(position){
-            case RIGHT:
-                turn(120);
-                slide.setPower(-1);
-                sleep(800);
-                slide.setPower(0);
-                slide.setPower(1);
-                sleep(1000);
-                slide.setPower(0);
-                turn(-30);
-                break;
             case MIDDLE:
-                turn(90);
+                driveToDistance(10);
                 slide.setPower(-1);
                 sleep(800);
-                slide.setPower(0);
                 slide.setPower(1);
                 sleep(1000);
-                slide.setPower(0);
+                turn(-80);
                 break;
             case LEFT:
-                turn(60);
+                driveToDistance(10);
+                turn(-45);
                 slide.setPower(-1);
                 sleep(800);
-                slide.setPower(0);
                 slide.setPower(1);
                 sleep(1000);
-                slide.setPower(0);
-                turn(30);
-
+                turn(-35);
                 break;
+            case RIGHT:
+                driveToDistance(10);
+                turn(45);
+                slide.setPower(-1);
+                sleep(800);
+                slide.setPower(1);
+                sleep(1000);
+                turn(-125);
         }
-        
-        driveToDistance(10);
 
-        turn(-80);
+
         driveToDistance(40);
         turn(-55);
         driveToDistance(-48);
