@@ -16,7 +16,7 @@ public class DepotSideNew extends AlmondLinear {
         unlatch();
         PIDDrive(-150,-150,-150,-150);
         PIDDrive(250,-250,-250,250);
-        PIDDrive(250,250,250,250);
+        PIDDrive(150,150,150,150);
         initImu();
 
         /*
@@ -25,11 +25,11 @@ public class DepotSideNew extends AlmondLinear {
          *
          */
         detectorEnable();
-        if(detector.getWidth()>40&&detector.isFound()){
+        if(detector.isFound()){
             position = mineralPosition.MIDDLE;
         } else {
             turn(30);
-            if(detector.getWidth()>20&&detector.isFound()){
+            if(detector.isFound()){
                 position = mineralPosition.RIGHT;
                 turn(-30);
             } else {
