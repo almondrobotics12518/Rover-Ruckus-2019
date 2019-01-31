@@ -5,44 +5,75 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
 @Autonomous(name = "Crater Side New", group = "auto")
-public class CraterSideNew extends AlmondLinear{
+public class CraterSideNew extends AlmondLinear {
     public void runOpMode() throws InterruptedException {
-        mineralPosition position = mineralPosition.UNKNOWN;
+
         hardwareMap();
         setModeRunUsingEncoders();
-        teamMarker.setPosition(0.4);
+        teamMarker.setPosition(0.8);
         waitForStart();
 
-
         while (opModeIsActive() && isRunning) {
-            lScrew.setPower(1);
-            sleep(9000);
-            lScrew.setPower(0);
-            PIDDrive(-300, -300, -300, -300);
-            PIDDrive(500, -500, -500, 500);
-            PIDDrive(300, 300, 300, 300);
+            unlatch();
             detectorEnable();
-            if (detector.isFound() && detector.getWidth() > 30) {
-                driveToDistance(32);
+            PIDDrive(-100, -100, -100, -100);
+            PIDDrive(250, -250, -250, 250);
+            PIDDrive(200, 200, 200, 200);
+            initImu();
+
+            /*
+             * Sampling code that scans and returns a position
+             * for the mineral.
+             *
+             */
+
+
+            if (detector.isFound()) {
+                detector.disable();
+                turn(90);
+                driveToDistance(20);
+                driveToDistance(-10);
+                turn(-80);
 
 
             } else {
-                encoderTurn(90); // Moves clockwise
-                sleep(500);
-            }
-                if (detector.isFound() && detector.getWidth() > 30) {
-
-
+                turn(30);
+                if(detector.isFound()){
+                    detector.disable();
+                    turn(60);
+                    driveToDistance(10);
+                    turn(45);
+                    driveToDistance(16);
+                    driveToDistance(-16);
+                    turn(-130);
                 } else {
-                encoderTurn(-180);
+                    detector.disable();
+                    turn(60);
+                    driveToDistance(10);
+                    turn(-45);
+                    driveToDistance(16);
+                    driveToDistance(-16);
+                    turn(-35);
 
                 }
-
-
             }
 
-        detector.disable();
-        isRunning = false;
+            /*
+             * Turns based on the position returned by sampling
+             * above.
+             */
+
+            driveToDistance(40);
+            turn(-55);
+            driveToDistance(24);
+            turn(-90);
+            teamMarker.setPosition(0.4);
+            sleep(300);
+            turn(-95);
+            driveToDistance(36);
+            detector.disable();
+            isRunning = false;
 
         }
     }
+}
