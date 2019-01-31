@@ -69,7 +69,7 @@ public class DepotSideNew extends AlmondLinear {
         driveToDistance(53);
 
 
-        
+
         slide.setPower(-1);
         sleep(800);
         slide.setPower(0);
