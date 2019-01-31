@@ -25,9 +25,9 @@ public class DepotSideNew extends AlmondLinear {
          * for the mineral.
          *
          */
+        globalAngle -= 5;
 
-
-        if (detector.isFound()) {
+        if (detector.isFound()&&detector.getWidth()>40) {
             detector.disable();
             turn(90);
             driveToDistance(20);
@@ -36,22 +36,22 @@ public class DepotSideNew extends AlmondLinear {
 
         } else {
             turn(30);
-            if(detector.isFound()){
+            if(detector.isFound()&&detector.getWidth()>20){
                 detector.disable();
                 turn(60);
-                driveToDistance(10);
-                turn(45);
-                driveToDistance(16);
-                driveToDistance(-16);
+                driveToDistance(9);
+                turn(50);
+                driveToDistance(18);
+                driveToDistance(-18);
                 turn(-130);
             } else {
                 detector.disable();
                 turn(60);
-                driveToDistance(10);
-                turn(-45);
-                driveToDistance(16);
-                driveToDistance(-16);
-                turn(-35);
+                driveToDistance(9);
+                turn(-50);
+                driveToDistance(18);
+                driveToDistance(-18);
+                turn(-30);
 
             }
         }
@@ -61,12 +61,12 @@ public class DepotSideNew extends AlmondLinear {
          * above.
          */
 
-        driveToDistance(40);
-        turn(-55);
-        driveToDistance(-48);
+        driveToDistance(43);
+        turn(-52);
+        driveToDistance(-50);
         teamMarker.setPosition(0.4);
         sleep(400);
-        driveToDistance(58);
+        driveToDistance(53);
 
 
         

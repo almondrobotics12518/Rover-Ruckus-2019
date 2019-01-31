@@ -28,7 +28,7 @@ public class CraterSideNew extends AlmondLinear {
              */
 
 
-            if (detector.isFound()) {
+            if (detector.isFound() && detector.getWidth()>40) {
                 detector.disable();
                 turn(90);
                 driveToDistance(20);
@@ -38,7 +38,7 @@ public class CraterSideNew extends AlmondLinear {
 
             } else {
                 turn(30);
-                if(detector.isFound()){
+                if(detector.isFound() && detector.getWidth()>20){
                     detector.disable();
                     turn(60);
                     driveToDistance(10);
@@ -71,6 +71,12 @@ public class CraterSideNew extends AlmondLinear {
             sleep(300);
             turn(-95);
             driveToDistance(36);
+
+            slide.setPower(-1);
+            sleep(800);
+            slide.setPower(0);
+
+
             detector.disable();
             isRunning = false;
 
