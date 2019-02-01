@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.control.constants.DriveConstants;
 
+import org.firstinspires.ftc.teamcode.control.constants.LeadScrewConstants;
 import org.firstinspires.ftc.teamcode.control.motion.PID;
 
 import java.security.cert.CertStoreParameters;
@@ -223,11 +224,11 @@ public abstract class AlmondLinear extends LinearOpMode
      */
     public void turn(float angle){
 
-        double kp=0.013;
+        double kp=0.015;
         double ki=0;
-        double kd=0.002;
+        double kd=0;
         double feedForward = 0;
-        double minimum = 0.05;
+        double minimum = 0.1;
         turnDirection direction;
 
         double target = (globalAngle + angle + 360) % 360;
@@ -251,7 +252,7 @@ public abstract class AlmondLinear extends LinearOpMode
             direction = turnDirection.CLOCKWISE;
         }
 
-        while(opModeIsActive()&&Math.abs(error)>0.1){
+        while(opModeIsActive()&&Math.abs(error)>0.35){
             if(direction == turnDirection.CLOCKWISE){
                 error = (((target-getCurrentAngle())%360)+360)%360;
                 if(error>270){
@@ -278,14 +279,10 @@ public abstract class AlmondLinear extends LinearOpMode
             lastError = error;
             telemetry.addData("error",error);
             telemetry.addData("Power Variable",powerTurn);
-            telemetry.addData("Left Front Power",leftFront.getPower());
-            telemetry.addData("Left Back Power",leftBack.getPower());
-            telemetry.addData("Right Front Power",rightFront.getPower());
-            telemetry.addData("Right Back Power",rightBack.getPower());
             telemetry.addData("Current Angle",getCurrentAngle());
             telemetry.update();
         }
-        globalAngle = (((globalAngle+ angle) % 360)+360)%360;
+        globalAngle = ((globalAngle+ angle+360) % 360);
 
         setPowerAll(0);
 
@@ -307,8 +304,8 @@ public abstract class AlmondLinear extends LinearOpMode
     public void PIDDrive(int lf,int lb, int rf, int rb,double max){
         double kp = 0.001;
         double ki = 0;
-        double kd = 0.001;
-        double minimum = 0.1;
+        double kd = 0.0005;
+        double minimum = 0.08;
         double feedForward = 0.03;
         double powerLf;
         double powerLb;
@@ -343,7 +340,7 @@ public abstract class AlmondLinear extends LinearOpMode
                 Math.abs(leftBack.getCurrentPosition()-tarLb)>20 ||
                 Math.abs(rightBack.getCurrentPosition()-tarRb)>20)){
 
-            maxPower += 0.03;
+            maxPower += 0.05;
             if(maxPower>max){
                 maxPower = max;
             }
@@ -390,6 +387,7 @@ public abstract class AlmondLinear extends LinearOpMode
 
         }
         setPowerAll(0);
+        sleep(50);
     }
 
     /**
@@ -515,7 +513,7 @@ public abstract class AlmondLinear extends LinearOpMode
         lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lScrew.setPower(-1);
         int current = lScrew.getCurrentPosition();
-        int target = current -12500;
+        int target = current - LeadScrewConstants.TICKS_TO_HANG;
         while(opModeIsActive()&&lScrew.getCurrentPosition()>target){
             telemetry.addData("Position",lScrew.getCurrentPosition());
             telemetry.update();
@@ -527,7 +525,7 @@ public abstract class AlmondLinear extends LinearOpMode
         lScrew.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         int current = lScrew.getCurrentPosition();
         lScrew.setPower(1);
-        int target = current+12500;
+        int target = current+LeadScrewConstants.TICKS_TO_HANG;
         while(opModeIsActive()&&lScrew.getCurrentPosition() < target){
             telemetry.addData("Position",lScrew.getCurrentPosition());
             telemetry.addData("Target",target);

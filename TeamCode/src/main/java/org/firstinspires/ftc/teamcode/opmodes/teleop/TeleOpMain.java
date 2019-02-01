@@ -20,14 +20,15 @@ public class TeleOpMain extends LinearOpMode {
     private DcMotor armLeft;
     private DcMotor armRight;
     private CRServo intake;
-    private float leftX;
-    private float leftY;
-    private float rightX;
+    private double leftX;
+    private double leftY;
+    private double rightX;
     private double LF;
     private double RF;
     private double LB;
     private double RB;
     private double armY;
+    private double rightMultiplier;
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -65,9 +66,14 @@ public class TeleOpMain extends LinearOpMode {
         // dont need isrunning
         waitForStart();
         while(opModeIsActive()){
+            if(gamepad1.right_bumper){
+                rightMultiplier = 1;
+            } else {
+                rightMultiplier = 0.5;
+            }
             leftX = -gamepad1.left_stick_x; // Reverse left joystick's X coordinate
             leftY = gamepad1.left_stick_y; // Reverse left joystick's Y coordinate
-            rightX = -gamepad1.right_stick_x;
+            rightX = -gamepad1.right_stick_x * rightMultiplier;
             double speed = Math.hypot(leftX, leftY); // Takes hypotenuse of leftX and leftY
             double angle = Math.atan2(leftY, leftX) - Math.PI / 4; // Calculates angle of direction
 
@@ -83,7 +89,7 @@ public class TeleOpMain extends LinearOpMode {
 
             lScrew.setPower(gamepad1.right_trigger-gamepad1.left_trigger); // Gives power to the lScrew
 
-            armY = gamepad2.right_stick_y*0.35;
+            armY = gamepad2.right_stick_y*0.25;
             if (Math.abs(armY)==0){
                 armLeft.setPower(0);
                 armRight.setPower(0);

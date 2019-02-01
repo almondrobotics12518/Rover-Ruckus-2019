@@ -4,6 +4,7 @@ import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.control.logging.DataLogThread2;
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
 
-
+@Disabled
 @Autonomous(name="Depot Side ",group="auto")
 public class DepotSideMain extends AlmondLinear
 {

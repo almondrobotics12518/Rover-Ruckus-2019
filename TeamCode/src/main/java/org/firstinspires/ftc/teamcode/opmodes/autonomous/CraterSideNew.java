@@ -27,14 +27,12 @@ public class CraterSideNew extends AlmondLinear {
              *
              */
 
-
             if (detector.isFound() && detector.getWidth()>40) {
                 detector.disable();
                 turn(90);
                 driveToDistance(20);
                 driveToDistance(-10);
                 turn(-80);
-
 
             } else {
                 turn(30);
@@ -43,18 +41,17 @@ public class CraterSideNew extends AlmondLinear {
                     turn(60);
                     driveToDistance(10);
                     turn(45);
-                    driveToDistance(16);
-                    driveToDistance(-16);
+                    driveToDistance(20);
+                    driveToDistance(-20);
                     turn(-130);
                 } else {
                     detector.disable();
                     turn(60);
                     driveToDistance(10);
                     turn(-45);
-                    driveToDistance(16);
-                    driveToDistance(-16);
+                    driveToDistance(20);
+                    driveToDistance(-20);
                     turn(-35);
-
                 }
             }
 
@@ -63,23 +60,21 @@ public class CraterSideNew extends AlmondLinear {
              * above.
              */
 
-            driveToDistance(40);
+            driveToDistance(44);
             turn(-55);
-            driveToDistance(24);
+            driveToDistance(32);
             turn(-90);
             teamMarker.setPosition(0.4);
             sleep(300);
             turn(-95);
-            driveToDistance(36);
+            driveToDistance(45);
 
             slide.setPower(-1);
             sleep(800);
             slide.setPower(0);
 
-
             detector.disable();
             isRunning = false;
-
         }
     }
 }
