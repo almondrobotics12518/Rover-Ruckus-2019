@@ -63,14 +63,14 @@ public class CraterSideNew extends AlmondLinear {
              * above.
              */
 
-            driveToDistance(40);
+            driveToDistance(43);
             turn(-55);
             driveToDistance(24);
             turn(-90);
             teamMarker.setPosition(0.4);
             sleep(300);
             turn(-95);
-            driveToDistance(36);
+            driveToDistance(40);
 
             slide.setPower(-1);
             sleep(800);
