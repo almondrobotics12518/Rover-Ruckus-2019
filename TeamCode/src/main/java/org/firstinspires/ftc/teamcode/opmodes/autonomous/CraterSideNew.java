@@ -10,7 +10,7 @@ public class CraterSideNew extends AlmondLinear {
 
         hardwareMap();
         setModeRunUsingEncoders();
-        teamMarker.setPosition(0.8);
+        teamMarker.setPosition(1);
         waitForStart();
 
         while (opModeIsActive() && isRunning) {
@@ -18,7 +18,7 @@ public class CraterSideNew extends AlmondLinear {
             detectorEnable();
             PIDDrive(-100, -100, -100, -100);
             PIDDrive(250, -250, -250, 250);
-            PIDDrive(200, 200, 200, 200);
+            PIDDrive(150, 150, 150, 150);
             initImu();
 
             /*
@@ -60,7 +60,7 @@ public class CraterSideNew extends AlmondLinear {
              * above.
              */
 
-            driveToDistance(44);
+            driveToDistance(45);
             turn(-55);
             driveToDistance(32);
             turn(-90);

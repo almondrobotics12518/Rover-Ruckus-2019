@@ -1,4 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-public class TeleOpAlmondLinear {
+import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
+
+public class TeleOpAlmondLinear extends AlmondLinear {
+    public void runOpMode() throws InterruptedException{
+
+    }
 }

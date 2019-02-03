@@ -20,15 +20,15 @@ public class TeleOpMain extends LinearOpMode {
     private DcMotor armLeft;
     private DcMotor armRight;
     private CRServo intake;
-    private double leftX;
-    private double leftY;
-    private double rightX;
-    private double LF;
-    private double RF;
-    private double LB;
-    private double RB;
-    private double armY;
-    private double rightMultiplier;
+    private double leftX=0;
+    private double leftY=0;
+    private double rightX=0;
+    private double LF=0;
+    private double RF=0;
+    private double LB=0;
+    private double RB=0;
+    private double armY=0;
+    private double rightMultiplier=0;
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -82,12 +82,7 @@ public class TeleOpMain extends LinearOpMode {
             RF = speed * Math.sin(angle)-rightX; // Calculates power for moving for the RF wheel
             RB = speed * Math.cos(angle)-rightX; // Calculates power for moving for the RB wheel
 
-            leftFront.setPower(LF * 0.65); // Gives power to LF wheels
-            leftBack.setPower(LB * 0.65); // Gives power to LB wheels
-            rightFront.setPower(RF * 0.65); // Gives power to RF wheels
-            rightBack.setPower(RB * 0.65); // Gives power to RB wheels
 
-            lScrew.setPower(gamepad1.right_trigger-gamepad1.left_trigger); // Gives power to the lScrew
 
             armY = gamepad2.right_stick_y*0.25;
             if (Math.abs(armY)==0){
@@ -101,6 +96,12 @@ public class TeleOpMain extends LinearOpMode {
 
 
 
+            leftFront.setPower(LF * 0.65); // Gives power to LF wheels
+            leftBack.setPower(LB * 0.65); // Gives power to LB wheels
+            rightFront.setPower(RF * 0.65); // Gives power to RF wheels
+            rightBack.setPower(RB * 0.65); // Gives power to RB wheels
+
+            lScrew.setPower(gamepad1.right_trigger-gamepad1.left_trigger); // Gives power to the lScrew
 
             intake.setPower(gamepad2.right_trigger-gamepad2.left_trigger); //Spins the Intake
 
