@@ -224,11 +224,12 @@ public abstract class AlmondLinear extends LinearOpMode
      */
     public void turn(float angle){
 
-        double kp=0.015;
+        double kp=0.055;
         double ki=0;
-        double kd=0;
+        double kd=0.027;
         double feedForward = 0;
         double minimum = 0.1;
+        double max = 0.65;
         turnDirection direction;
 
         double target = (globalAngle + angle + 360) % 360;
@@ -266,7 +267,7 @@ public abstract class AlmondLinear extends LinearOpMode
             }
 
             powerTurn = PID.calculate(kp,ki,kd,error,errorT,lastError,0,0.1);
-            powerTurn += (powerTurn/Math.abs(powerTurn))*feedForward;
+            if(powerTurn>max){powerTurn = (powerTurn/Math.abs(powerTurn))*max;}
             if (Math.abs(powerTurn)>1){powerTurn = powerTurn/(Math.abs(powerTurn));}
             if (Math.abs(powerTurn)<minimum){powerTurn = (powerTurn/Math.abs(powerTurn))*minimum;}
             if(direction == turnDirection.CLOCKWISE){
@@ -290,7 +291,7 @@ public abstract class AlmondLinear extends LinearOpMode
 
 
     public void PIDDrive(int lf, int lb, int rf, int rb){
-        PIDDrive(lf,lb,rf,rb,1);
+        PIDDrive(lf,lb,rf,rb,0.7);
     }
     /**
      * Drives to target encoder position using PID loop.
@@ -302,7 +303,7 @@ public abstract class AlmondLinear extends LinearOpMode
      */
 
     public void PIDDrive(int lf,int lb, int rf, int rb,double max){
-        double kp = 0.0015;
+        double kp = 0.0012;
         double ki = 0;
         double kd = 0.0008;
         double minimum = 0.06;
@@ -335,10 +336,10 @@ public abstract class AlmondLinear extends LinearOpMode
         tarRf = rightFront.getCurrentPosition()+rf;
         tarRb = rightBack.getCurrentPosition()+rb;
 
-        while(opModeIsActive()&&(Math.abs(leftFront.getCurrentPosition()-tarLf)>20||
-                Math.abs(rightFront.getCurrentPosition()-tarRf)>20 ||
-                Math.abs(leftBack.getCurrentPosition()-tarLb)>20 ||
-                Math.abs(rightBack.getCurrentPosition()-tarRb)>20)){
+        while(opModeIsActive()&&(Math.abs(leftFront.getCurrentPosition()-tarLf)>30||
+                Math.abs(rightFront.getCurrentPosition()-tarRf)>30 ||
+                Math.abs(leftBack.getCurrentPosition()-tarLb)>30 ||
+                Math.abs(rightBack.getCurrentPosition()-tarRb)>30)){
 
             maxPower += 0.05;
             if(maxPower>max){

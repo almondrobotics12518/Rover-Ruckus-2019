@@ -71,8 +71,8 @@ public class TeleOpMain extends LinearOpMode {
             } else {
                 rightMultiplier = 0.5;
             }
-            leftX = -gamepad1.left_stick_x; // Reverse left joystick's X coordinate
-            leftY = gamepad1.left_stick_y; // Reverse left joystick's Y coordinate
+            leftX = gamepad1.left_stick_x; // Reverse left joystick's X coordinate
+            leftY = -gamepad1.left_stick_y; // Reverse left joystick's Y coordinate
             rightX = -gamepad1.right_stick_x * rightMultiplier;
             double speed = Math.hypot(leftX, leftY); // Takes hypotenuse of leftX and leftY
             double angle = Math.atan2(leftY, leftX) - Math.PI / 4; // Calculates angle of direction
@@ -90,8 +90,8 @@ public class TeleOpMain extends LinearOpMode {
                 armRight.setPower(0);
             } else {
                 armY=(0.2*armY/Math.abs(armY))+armY;
-                armLeft.setPower(-armY); // Gives power to the arm
-                armRight.setPower(armY);
+                armLeft.setPower(armY); // Gives power to the arm
+                armRight.setPower(-armY);
             }
 
 
