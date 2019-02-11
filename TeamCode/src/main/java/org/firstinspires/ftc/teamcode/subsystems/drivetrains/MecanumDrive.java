@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems.drivetrains;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.TICKS_PER_INCH;
 
@@ -12,14 +13,15 @@ public class MecanumDrive {
     private DcMotor rb;
 
 
+
     /* This is the constructor for our mecanum drivetrain
        It takes 4 motors as input.
      */
-    public MecanumDrive(DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack){
-        lf = leftFront;
-        lb = leftBack;
-        rf = rightFront;
-        rb = rightBack;
+    public MecanumDrive(HardwareMap hardwareMap){
+        lf = hardwareMap.dcMotor.get("LeftFront");
+        lb = hardwareMap.dcMotor.get("LeftBack");
+        rf = hardwareMap.dcMotor.get("RightFront");
+        rb = hardwareMap.dcMotor.get("RightBack");
     }
 
 
