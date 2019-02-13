@@ -89,7 +89,7 @@ public class TeleOpMain extends LinearOpMode {
 
             armPosTicks = (armLeft.getCurrentPosition()*-1)-OFF_SET_TICKS;
             armPosAngle = armPosTicks/TICKS_PER_DEGREE;
-            armPowerOffset = Math.cos(Math.toRadians(armPosAngle))*0.22;
+            armPowerOffset = Math.cos(Math.toRadians(armPosAngle))*0.25;
 
 
             armY = gamepad2.right_stick_y*0.25;
