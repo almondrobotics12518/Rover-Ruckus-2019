@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import static org.firstinspires.ftc.teamcode.control.constants.ArmConstants.OFF_SET_TICKS;
+import static org.firstinspires.ftc.teamcode.control.constants.ArmConstants.TICKS_PER_DEGREE;
+
 
 @TeleOp(name="LinearTeleOp",group="teleop")
 public class TeleOpMain extends LinearOpMode {
@@ -29,7 +32,9 @@ public class TeleOpMain extends LinearOpMode {
     private double RB=0;
     private double armY=0;
     private double rightMultiplier=0;
-
+    private double armPosTicks;
+    private double armPosAngle;
+    private double armPowerOffset;
     @Override
     public void runOpMode() throws InterruptedException{
         // Setting dcMotor variables to motors
@@ -56,7 +61,7 @@ public class TeleOpMain extends LinearOpMode {
         armRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
+        armRight.setDirection(DcMotorSimple.Direction.REVERSE);
         /*leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -82,6 +87,9 @@ public class TeleOpMain extends LinearOpMode {
             RF = speed * Math.sin(angle)-rightX; // Calculates power for moving for the RF wheel
             RB = speed * Math.cos(angle)-rightX; // Calculates power for moving for the RB wheel
 
+            armPosTicks = (armLeft.getCurrentPosition()*-1)-OFF_SET_TICKS;
+            armPosAngle = armPosTicks/TICKS_PER_DEGREE;
+            armPowerOffset = Math.cos(Math.toRadians(armPosAngle))*0.22;
 
 
             armY = gamepad2.right_stick_y*0.25;
@@ -89,11 +97,10 @@ public class TeleOpMain extends LinearOpMode {
                 armLeft.setPower(0);
                 armRight.setPower(0);
             } else {
-                armY=(0.2*armY/Math.abs(armY))+armY;
-                armLeft.setPower(armY); // Gives power to the arm
-                armRight.setPower(-armY);
-            }
 
+                armLeft.setPower(armY+armPowerOffset); // Gives power to the arm
+                armRight.setPower(armY+armPowerOffset);
+            }
 
 
             leftFront.setPower(LF * 0.65); // Gives power to LF wheels
@@ -122,6 +129,9 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.addData("ArmRight zeroPowerBehavior", armRight.getZeroPowerBehavior());
             telemetry.addData("ArmRight Power",armRight.getPower());
             telemetry.addData("ArmLeft Power",armLeft.getPower());
+            telemetry.addData("Arm",armLeft.getCurrentPosition());
+            telemetry.addData("Arm",armRight.getCurrentPosition());
+            telemetry.addData("Arm Power Offset",armPowerOffset);
             telemetry.addData("Slide",slide.getCurrentPosition());
             telemetry.addData("Arm y",armY);
             telemetry.addData("Gamepad 2 left stick Y",gamepad2.left_stick_y);

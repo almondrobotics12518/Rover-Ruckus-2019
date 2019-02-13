@@ -6,6 +6,8 @@ package org.firstinspires.ftc.teamcode.control.constants;
  */
 public class ArmConstants {
     public static final double TICKS_PER_REVOLUTION = 3360;
+    public static final double OFF_SET_TICKS = 360;
+
     public static final double TICKS_PER_DEGREE = TICKS_PER_REVOLUTION/360;
 
 }
