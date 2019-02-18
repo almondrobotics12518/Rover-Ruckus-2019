@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.control.motion.PID;
+
 import static org.firstinspires.ftc.teamcode.control.constants.ArmConstants.OFF_SET_TICKS;
 import static org.firstinspires.ftc.teamcode.control.constants.ArmConstants.TICKS_PER_DEGREE;
 
@@ -14,6 +16,9 @@ import static org.firstinspires.ftc.teamcode.control.constants.ArmConstants.TICK
 @TeleOp(name="LinearTeleOp",group="teleop")
 public class TeleOpMain extends LinearOpMode {
 
+    private int targetArmPos = 1100;
+
+    int currentArmPos;
     private DcMotor lScrew;
     private DcMotor leftFront;
     private DcMotor rightFront;
@@ -93,15 +98,16 @@ public class TeleOpMain extends LinearOpMode {
             armPowerOffset = Math.cos(Math.toRadians(armPosAngle))*0.25;
 */
 
-            armY = gamepad2.right_stick_y*0.45;
-            if (Math.abs(armY)==0){
-                armLeft.setPower(0);
-                armRight.setPower(0);
+            if(gamepad2.a && opModeIsActive() && gamepad2.right_stick_y == 0){
+                armY = PID.calculate(10,0,0,armLeft.getCurrentPosition()-targetArmPos,0,0,0,0);
             } else {
-
-                armLeft.setPower(armY); // Gives power to the arm
-                armRight.setPower(armY);
+                armY = gamepad2.right_stick_y * 0.5;
             }
+
+            armLeft.setPower(armY);
+            armLeft.setPower(armY);
+
+
 
 
             leftFront.setPower(LF * 0.65); // Gives power to LF wheels
