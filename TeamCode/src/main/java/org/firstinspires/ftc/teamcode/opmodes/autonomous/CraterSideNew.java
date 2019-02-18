@@ -10,7 +10,7 @@ public class CraterSideNew extends AlmondLinear {
 
         hardwareMap();
         setModeRunUsingEncoders();
-        teamMarker.setPosition(1);
+        teamMarker.setPosition(0.4);
         waitForStart();
 
         while (opModeIsActive() && isRunning) {
@@ -30,8 +30,8 @@ public class CraterSideNew extends AlmondLinear {
             if (detector.isFound() && detector.getWidth()>40) {
                 detector.disable();
                 turn(90); // turns towards gold
-                driveToDistance(20); // pushes gold
-                driveToDistance(-10); // goes away from gold
+                driveToDistance(22); // pushes gold
+                driveToDistance(-12); // goes away from gold
                 turn(-80); // turns towards  side
 
             } else {
@@ -75,10 +75,9 @@ public class CraterSideNew extends AlmondLinear {
             driveToDistance(45);
             turn(-55);
             driveToDistance(32);
-            turn(-90);
-            teamMarker.setPosition(0.4);
+            turn(-180);
+            teamMarker.setPosition(1);
             sleep(300);
-            turn(-95);
             driveToDistance(45);
 
             slide.setPower(-1);

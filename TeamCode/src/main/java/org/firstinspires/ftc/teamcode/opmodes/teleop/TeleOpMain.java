@@ -87,19 +87,20 @@ public class TeleOpMain extends LinearOpMode {
             RF = speed * Math.sin(angle)-rightX; // Calculates power for moving for the RF wheel
             RB = speed * Math.cos(angle)-rightX; // Calculates power for moving for the RB wheel
 
+            /*
             armPosTicks = (armLeft.getCurrentPosition()*-1)-OFF_SET_TICKS;
             armPosAngle = armPosTicks/TICKS_PER_DEGREE;
             armPowerOffset = Math.cos(Math.toRadians(armPosAngle))*0.25;
+*/
 
-
-            armY = gamepad2.right_stick_y*0.25;
+            armY = gamepad2.right_stick_y*0.45;
             if (Math.abs(armY)==0){
                 armLeft.setPower(0);
                 armRight.setPower(0);
             } else {
 
-                armLeft.setPower(armY+armPowerOffset); // Gives power to the arm
-                armRight.setPower(armY+armPowerOffset);
+                armLeft.setPower(armY); // Gives power to the arm
+                armRight.setPower(armY);
             }
 
 

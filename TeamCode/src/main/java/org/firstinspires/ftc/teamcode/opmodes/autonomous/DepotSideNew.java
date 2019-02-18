@@ -9,7 +9,7 @@ public class DepotSideNew extends AlmondLinear {
     public void runOpMode() throws InterruptedException {
         hardwareMap();
         setModeRunUsingEncoders();
-        teamMarker.setPosition(1);
+        teamMarker.setPosition(0.4);
         mineralPosition position;
 
         waitForStart();
@@ -66,7 +66,7 @@ public class DepotSideNew extends AlmondLinear {
         turn(-45);
         driveToDistance(-52);
 
-        teamMarker.setPosition(0.4);
+        teamMarker.setPosition(1);
         sleep(300);
 
         driveToDistance(52);
