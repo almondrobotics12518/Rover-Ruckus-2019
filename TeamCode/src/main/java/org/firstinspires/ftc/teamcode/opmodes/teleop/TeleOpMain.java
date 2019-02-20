@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.control.motion.PID;
 
@@ -42,6 +43,8 @@ public class TeleOpMain extends LinearOpMode {
     private double armPowerOffset;
     @Override
     public void runOpMode() throws InterruptedException{
+
+        ElapsedTime timer = new ElapsedTime();
         // Setting dcMotor variables to motors
         leftFront = hardwareMap.dcMotor.get("LeftFront");
         leftBack = hardwareMap.dcMotor.get("LeftBack");
@@ -75,6 +78,7 @@ public class TeleOpMain extends LinearOpMode {
 
         // dont need isrunning
         waitForStart();
+        timer.reset();
         while(opModeIsActive()){
             if(gamepad1.right_bumper){
                 rightMultiplier = 1;
@@ -99,13 +103,13 @@ public class TeleOpMain extends LinearOpMode {
 */
 
             if(gamepad2.a && opModeIsActive() && gamepad2.right_stick_y == 0){
-                armY = PID.calculate(10,0,0,armLeft.getCurrentPosition()-targetArmPos,0,0,0,0);
+                armY = PID.calculate(0.002,0,0,targetArmPos-getCurrentArmPos(),0,0,0,0);
             } else {
                 armY = gamepad2.right_stick_y * 0.5;
             }
 
             armLeft.setPower(armY);
-            armLeft.setPower(armY);
+            armRight.setPower(armY);
 
 
 
@@ -142,6 +146,7 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.addData("Slide",slide.getCurrentPosition());
             telemetry.addData("Arm y",armY);
             telemetry.addData("Gamepad 2 left stick Y",gamepad2.left_stick_y);
+            telemetry.addData("Time",timer.milliseconds());
             telemetry.update();
 
             // dont need this
@@ -159,4 +164,9 @@ public class TeleOpMain extends LinearOpMode {
 
 
     }
+
+    public int getCurrentArmPos() {
+        return -armLeft.getCurrentPosition();
+    }
 }
+
