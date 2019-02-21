@@ -107,6 +107,7 @@ public abstract class AlmondLinear extends LinearOpMode
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        armLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         if (isAuto)
         {
             rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -224,7 +225,7 @@ public abstract class AlmondLinear extends LinearOpMode
      */
     public void turn(float angle){
 
-        double kp=0.055;
+        double kp=0.04;
         double ki=0;
         double kd=0.027;
         double feedForward = 0;
@@ -289,6 +290,72 @@ public abstract class AlmondLinear extends LinearOpMode
 
     }
 
+    public void setAngle(float angle) {
+        double kp=0.04;
+        double ki=0;
+        double kd=0.027;
+        double feedForward = 0;
+        double minimum = 0.1;
+        double max = 0.65;
+        turnDirection direction;
+
+        double target = (globalAngle + angle + 360) % 360;
+        double powerTurn = 0;
+        double errorR = (target - getCurrentAngle()+360)%360;
+        double errorL = (getCurrentAngle()-target+360)%360;
+        double error;
+        double errorT = 0;
+        double lastError = 0;
+
+
+        /*
+        This code determines whether clockwise or counterclockwise is closer.
+         */
+
+        if(errorR>errorL){
+            error = errorL;
+            direction = turnDirection.COUNTERCLOCKWISE;
+        } else {
+            error = errorR;
+            direction = turnDirection.CLOCKWISE;
+        }
+
+
+            if(direction == turnDirection.CLOCKWISE){
+                error = (((target-getCurrentAngle())%360)+360)%360;
+                if(error>270){
+                    error-=360;
+                }
+            } else {
+                error = (((getCurrentAngle()-target)%360)+360)%360;
+                if(error>270){
+                    error-=360;
+                }
+            }
+
+            powerTurn = PID.calculate(kp,ki,kd,error,errorT,lastError,0,0.1);
+            if(powerTurn>max){powerTurn = (powerTurn/Math.abs(powerTurn))*max;}
+            if (Math.abs(powerTurn)>1){powerTurn = powerTurn/(Math.abs(powerTurn));}
+            if (Math.abs(powerTurn)<minimum){powerTurn = (powerTurn/Math.abs(powerTurn))*minimum;}
+            if(direction == turnDirection.CLOCKWISE){
+                setPower(powerTurn,powerTurn,-powerTurn,-powerTurn);
+            } else {
+                setPower(-powerTurn,-powerTurn,powerTurn,powerTurn);
+            }
+
+            errorT += error;
+            lastError = error;
+            telemetry.addData("error",error);
+            telemetry.addData("Power Variable",powerTurn);
+            telemetry.addData("Current Angle",getCurrentAngle());
+            telemetry.update();
+
+        globalAngle = ((globalAngle+ angle+360) % 360);
+
+        setPowerAll(0);
+
+
+    }
 
     public void PIDDrive(int lf, int lb, int rf, int rb){
         PIDDrive(lf,lb,rf,rb,0.7);
