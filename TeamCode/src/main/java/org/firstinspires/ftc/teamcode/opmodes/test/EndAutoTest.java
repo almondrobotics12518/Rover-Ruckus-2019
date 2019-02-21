@@ -12,6 +12,8 @@ public class EndAutoTest extends AlmondLinear {
             armError = -1000 - armLeft.getCurrentPosition();
             armPower = PID.calculate(0.001,0,0, armError,0,0,0,0);
             setAngle(180);
+            telemetry.addData("Arm Position",armLeft.getCurrentPosition());
+            telemetry.update();
         }
     }
 }

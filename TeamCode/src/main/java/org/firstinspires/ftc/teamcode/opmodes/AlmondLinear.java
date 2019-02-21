@@ -235,8 +235,9 @@ public abstract class AlmondLinear extends LinearOpMode
 
         double target = (globalAngle + angle + 360) % 360;
         double powerTurn = 0;
-        double errorR = (target - getCurrentAngle()+360)%360;
-        double errorL = (getCurrentAngle()-target+360)%360;
+        double currentAngle = getCurrentAngle();
+        double errorR = (target - currentAngle+360)%360;
+        double errorL = (currentAngle-target+360)%360;
         double error;
         double errorT = 0;
         double lastError = 0;
@@ -256,12 +257,12 @@ public abstract class AlmondLinear extends LinearOpMode
 
         while(opModeIsActive()&&Math.abs(error)>0.35){
             if(direction == turnDirection.CLOCKWISE){
-                error = (((target-getCurrentAngle())%360)+360)%360;
+                error = (((target-currentAngle)%360)+360)%360;
                 if(error>270){
                     error-=360;
                 }
             } else {
-                error = (((getCurrentAngle()-target)%360)+360)%360;
+                error = (((currentAngle-target)%360)+360)%360;
                 if(error>270){
                     error-=360;
                 }
@@ -281,7 +282,7 @@ public abstract class AlmondLinear extends LinearOpMode
             lastError = error;
             telemetry.addData("error",error);
             telemetry.addData("Power Variable",powerTurn);
-            telemetry.addData("Current Angle",getCurrentAngle());
+            telemetry.addData("Current Angle",currentAngle);
             telemetry.update();
         }
         globalAngle = ((globalAngle+ angle+360) % 360);
@@ -301,8 +302,9 @@ public abstract class AlmondLinear extends LinearOpMode
 
         double target = (globalAngle + angle + 360) % 360;
         double powerTurn = 0;
-        double errorR = (target - getCurrentAngle()+360)%360;
-        double errorL = (getCurrentAngle()-target+360)%360;
+        double currentAngle = getCurrentAngle();
+        double errorR = (target - currentAngle+360)%360;
+        double errorL = (currentAngle-target+360)%360;
         double error;
         double errorT = 0;
         double lastError = 0;
@@ -322,12 +324,12 @@ public abstract class AlmondLinear extends LinearOpMode
 
 
             if(direction == turnDirection.CLOCKWISE){
-                error = (((target-getCurrentAngle())%360)+360)%360;
+                error = (((target-currentAngle)%360)+360)%360;
                 if(error>270){
                     error-=360;
                 }
             } else {
-                error = (((getCurrentAngle()-target)%360)+360)%360;
+                error = (((currentAngle-target)%360)+360)%360;
                 if(error>270){
                     error-=360;
                 }
@@ -345,9 +347,11 @@ public abstract class AlmondLinear extends LinearOpMode
 
             errorT += error;
             lastError = error;
+
+
             telemetry.addData("error",error);
             telemetry.addData("Power Variable",powerTurn);
-            telemetry.addData("Current Angle",getCurrentAngle());
+            telemetry.addData("Current Angle",currentAngle);
             telemetry.update();
 
         globalAngle = ((globalAngle+ angle+360) % 360);
