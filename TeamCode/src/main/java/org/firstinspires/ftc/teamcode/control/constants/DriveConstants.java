@@ -18,4 +18,5 @@ public class DriveConstants {
     public final static double EXPERIMENTAL_TICKS_PER_INCH = 3000/22;
     public final static double TICKS_PER_DEGREE = (5000/166)*(537.6/1680);
 
+    public final static double VELOCITY = 32;
 }
