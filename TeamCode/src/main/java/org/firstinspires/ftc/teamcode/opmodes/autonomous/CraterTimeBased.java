@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
@@ -8,7 +9,7 @@ import static org.firstinspires.ftc.teamcode.control.constants.DriveConstants.VE
 import static org.firstinspires.ftc.teamcode.opmodes.AlmondLinear.mineralPosition.LEFT;
 import static org.firstinspires.ftc.teamcode.opmodes.AlmondLinear.mineralPosition.MIDDLE;
 import static org.firstinspires.ftc.teamcode.opmodes.AlmondLinear.mineralPosition.RIGHT;
-
+@Autonomous(name = "Crater Time Based",group = "auto")
 public class CraterTimeBased extends AlmondLinear {
     private ElapsedTime timer;
     public void runOpMode() throws InterruptedException {
