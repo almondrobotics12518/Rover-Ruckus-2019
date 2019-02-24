@@ -407,15 +407,25 @@ public abstract class AlmondLinear extends LinearOpMode
         double maxPower=0;
         double origin = leftFront.getCurrentPosition();
 
-        tarLf = leftFront.getCurrentPosition()+lf;
-        tarLb = leftBack.getCurrentPosition()+lb;
-        tarRf = rightFront.getCurrentPosition()+rf;
-        tarRb = rightBack.getCurrentPosition()+rb;
+        int lfPos;
+        int lbPos;
+        int rfPos;
+        int rbPos;
 
-        while(opModeIsActive()&&(Math.abs(leftFront.getCurrentPosition()-tarLf)>30||
-                Math.abs(rightFront.getCurrentPosition()-tarRf)>30 ||
-                Math.abs(leftBack.getCurrentPosition()-tarLb)>30 ||
-                Math.abs(rightBack.getCurrentPosition()-tarRb)>30)){
+        lfPos = leftFront.getCurrentPosition();
+        lbPos = leftBack.getCurrentPosition();
+        rfPos = rightFront.getCurrentPosition();
+        rbPos = rightBack.getCurrentPosition();
+
+        tarLf = lfPos+lf;
+        tarLb = lbPos+lb;
+        tarRf = rfPos+rf;
+        tarRb = rbPos+rb;
+
+        while(opModeIsActive()&&(Math.abs(lfPos-tarLf)>30||
+                Math.abs(rfPos-tarRf)>30 ||
+                Math.abs(lbPos-tarLb)>30 ||
+                Math.abs(rbPos-tarRb)>30)){
 
             maxPower += 0.05;
             if(maxPower>max){
@@ -455,11 +465,6 @@ public abstract class AlmondLinear extends LinearOpMode
             lastErrorRf = errorRf;
             lastErrorRb = errorRb;
 
-            telemetry.addData("Left Front Power",leftFront.getPower());
-            telemetry.addData("Left Back Power",leftBack.getPower());
-            telemetry.addData("Right Front Power",rightFront.getPower());
-            telemetry.addData("Right Back Power",rightBack.getPower());
-            telemetry.update();
 
 
         }

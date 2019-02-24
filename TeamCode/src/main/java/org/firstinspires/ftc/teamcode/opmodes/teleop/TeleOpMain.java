@@ -20,6 +20,8 @@ public class TeleOpMain extends LinearOpMode {
     private int targetArmPos = -900;
     private int bottomArmPos = -1700;
 
+    double currentTime;
+    double lastTime;
     int currentArmPos;
     private DcMotor lScrew;
     private DcMotor leftFront;
@@ -81,6 +83,7 @@ public class TeleOpMain extends LinearOpMode {
         waitForStart();
         timer.reset();
         while(opModeIsActive()){
+            currentTime = timer.milliseconds();
             if(gamepad1.right_bumper){
                 rightMultiplier = 1;
             } else {
@@ -129,6 +132,7 @@ public class TeleOpMain extends LinearOpMode {
             slide.setPower(-gamepad2.left_stick_y*0.5); // Gives power to the slide
 
             // Add telemetry variables and updating them
+            /*
             telemetry.addData("FrontLeftPower",LF);
             telemetry.addData("FrontRightPower",RF);
             telemetry.addData("BackLeftPower",LB);
@@ -141,16 +145,17 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.addData("Hang",lScrew.getCurrentPosition());
             telemetry.addData("ArmLeft zeroPowerBehavior",armLeft.getZeroPowerBehavior());
             telemetry.addData("ArmRight zeroPowerBehavior", armRight.getZeroPowerBehavior());
+            */
             telemetry.addData("ArmRight Power",armRight.getPower());
             telemetry.addData("ArmLeft Power",armLeft.getPower());
             telemetry.addData("Arm",armLeft.getCurrentPosition());
-            telemetry.addData("Arm",armRight.getCurrentPosition());
             telemetry.addData("Arm Power Offset",armPowerOffset);
             telemetry.addData("Slide",slide.getCurrentPosition());
             telemetry.addData("Arm y",armY);
             telemetry.addData("Gamepad 2 left stick Y",gamepad2.left_stick_y);
-            telemetry.addData("Time",timer.milliseconds());
+            telemetry.addData("Time",currentTime-lastTime);
             telemetry.update();
+            lastTime = currentTime;
 
             // dont need this
 
