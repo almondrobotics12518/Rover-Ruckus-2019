@@ -17,7 +17,8 @@ import static org.firstinspires.ftc.teamcode.control.constants.ArmConstants.TICK
 @TeleOp(name="LinearTeleOp",group="teleop")
 public class TeleOpMain extends LinearOpMode {
 
-    private int targetArmPos = 1100;
+    private int targetArmPos = -900;
+    private int bottomArmPos = -1700;
 
     int currentArmPos;
     private DcMotor lScrew;
@@ -102,10 +103,12 @@ public class TeleOpMain extends LinearOpMode {
             armPowerOffset = Math.cos(Math.toRadians(armPosAngle))*0.25;
 */
 
-            if(gamepad2.a && opModeIsActive() && gamepad2.right_stick_y == 0){
-                armY = PID.calculate(0.002,0,0,targetArmPos-getCurrentArmPos(),0,0,0,0);
+            if(gamepad2.left_bumper && opModeIsActive() && gamepad2.right_stick_y == 0){
+                armY = PID.calculate(0.0015,0,0,armLeft.getCurrentPosition()-targetArmPos,0,0,0,0);
+            } else if(gamepad2.right_bumper && opModeIsActive() && gamepad2.right_stick_y == 0){
+                armY = PID.calculate(0.0007,0,0,armLeft.getCurrentPosition()-bottomArmPos,0,0,0,0);
             } else {
-                armY = gamepad2.right_stick_y * 0.5;
+                armY = gamepad2.right_stick_y * 0.45;
             }
 
             armLeft.setPower(armY);

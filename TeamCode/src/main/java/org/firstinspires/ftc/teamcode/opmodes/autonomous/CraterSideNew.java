@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.control.motion.PID;
 import org.firstinspires.ftc.teamcode.opmodes.AlmondLinear;
 
 @Autonomous(name = "Crater Side New", group = "auto")
@@ -15,11 +16,13 @@ public class CraterSideNew extends AlmondLinear {
 
         while (opModeIsActive() && isRunning) {
             unlatch();
+            initImu();
             detectorEnable();
+            globalAngle -= 7;
             PIDDrive(-100, -100, -100, -100);
             PIDDrive(250, -250, -250, 250);
             PIDDrive(150, 150, 150, 150);
-            initImu();
+
 
             /*
              * Sampling code that scans and returns a position
@@ -27,7 +30,7 @@ public class CraterSideNew extends AlmondLinear {
              *
              */
 
-            if (detector.isFound() && detector.getWidth()>40) {
+            if (detector.isFound() && detector.getWidth()>35) {
                 detector.disable();
                 turn(90); // turns towards gold
                 driveToDistance(22); // pushes gold
@@ -40,7 +43,7 @@ public class CraterSideNew extends AlmondLinear {
                     detector.disable();
                     turn(60); // face mid
                     driveToDistance(10); // goes mid way
-                    turn(45); // turns to 2nd position
+                    turn(50); // turns to 2nd position
                     driveToDistance(20); // pushes gold
                     driveToDistance(-20); //  goes back
                     turn(-130); // turns towards side
@@ -71,18 +74,23 @@ public class CraterSideNew extends AlmondLinear {
              * Turns based on the position returned by sampling
              * above.
              */
-
-            driveToDistance(45);
-            turn(-55);
+            turn(0);
+            driveToDistance(46.5);
+            turn(-50);
+            turn(0);
             driveToDistance(32);
-            turn(-180);
+            turn(172);
+            turn(0);
             teamMarker.setPosition(1);
             sleep(300);
-            driveToDistance(45);
+            driveToDistance(50);
+
 
             slide.setPower(-1);
-            sleep(800);
+            sleep(1000);
             slide.setPower(0);
+
+
 
             detector.disable();
             isRunning = false;

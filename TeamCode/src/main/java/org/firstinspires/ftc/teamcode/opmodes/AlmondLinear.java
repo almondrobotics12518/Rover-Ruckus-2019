@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -31,6 +32,7 @@ public abstract class AlmondLinear extends LinearOpMode
     public float globalAngle;
 
 
+    ElapsedTime timer;
     public int lfEnc = 0;
     public int lbEnc = 0;
     public int rbEnc = 0;
@@ -102,12 +104,14 @@ public abstract class AlmondLinear extends LinearOpMode
         armLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
+        timer = new ElapsedTime();
+
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        armLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        armRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if (isAuto)
         {
             rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -225,7 +229,7 @@ public abstract class AlmondLinear extends LinearOpMode
      */
     public void turn(float angle){
 
-        double kp=0.04;
+        double kp=0.055;
         double ki=0;
         double kd=0.027;
         double feedForward = 0;
@@ -255,7 +259,8 @@ public abstract class AlmondLinear extends LinearOpMode
             direction = turnDirection.CLOCKWISE;
         }
 
-        while(opModeIsActive()&&Math.abs(error)>0.35){
+        while(opModeIsActive()&&Math.abs(error)>0.1){
+            currentAngle = getCurrentAngle();
             if(direction == turnDirection.CLOCKWISE){
                 error = (((target-currentAngle)%360)+360)%360;
                 if(error>270){
@@ -362,7 +367,7 @@ public abstract class AlmondLinear extends LinearOpMode
     }
 
     public void PIDDrive(int lf, int lb, int rf, int rb){
-        PIDDrive(lf,lb,rf,rb,0.7);
+        PIDDrive(lf,lb,rf,rb,0.5);
     }
     /**
      * Drives to target encoder position using PID loop.
