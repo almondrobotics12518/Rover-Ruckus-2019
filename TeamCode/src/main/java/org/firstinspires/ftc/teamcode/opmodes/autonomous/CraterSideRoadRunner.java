@@ -21,7 +21,9 @@ public class CraterSideRoadRunner extends LinearOpMode{
         waitForStart();
         while(opModeIsActive()&&isRunning){
             drive.followTrajectory(craterToDepot);
-            sleep(10000);
+            while(opModeIsActive()&&drive.isFollowingTrajectory()){
+                drive.update();
+            }
             isRunning = false;
         }
 
