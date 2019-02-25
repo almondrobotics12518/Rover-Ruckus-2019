@@ -29,6 +29,7 @@ public class CraterTimeBased extends AlmondLinear {
             scan();
             turn(-45);
             turn(0);
+            globalAngle -= 90;
             driveToDistance(24);
             double innerArcLength = 2 * 9 * Math.PI/4;
             double outerArcLength = 2 * 27 * Math.PI/4;

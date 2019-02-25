@@ -31,7 +31,6 @@ public class SplineTestOpMode extends LinearOpMode {
         drive.followTrajectory(trajectory);
         while (!isStopRequested() && drive.isFollowingTrajectory()) {
             Pose2d currentPose = drive.getPoseEstimate();
-
             drive.update();
         }
     }
