@@ -17,8 +17,8 @@ import static org.firstinspires.ftc.teamcode.control.constants.ArmConstants.OFF_
 import static org.firstinspires.ftc.teamcode.control.constants.ArmConstants.TICKS_PER_DEGREE;
 
 
-@TeleOp(name="TeleOp Main (For Real)",group="teleop")
-public class TeleOpMain extends LinearOpMode {
+@TeleOp(name="TeleOp New Testing",group="teleop")
+public class TeleOpDriveToPos extends LinearOpMode {
     private int targetArmPos = 900;
     private int bottomArmPos = 1700;
 
@@ -60,11 +60,9 @@ public class TeleOpMain extends LinearOpMode {
         intake = hardwareMap.crservo.get("intake");
         slide = hardwareMap.dcMotor.get("Slide");
         lScrew = hardwareMap.dcMotor.get("LScrew");
-        boolean isSlideJoystickInput;
-        double leftStickY;
-        double slideY;
 
-        PIDFCoefficients armVelocityPid = new PIDFCoefficients(15,3,0,0);
+
+        PIDFCoefficients armVelocityPid = new PIDFCoefficients(0,0,0,0);
         // Reversing direction of right side motors
         //leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -80,8 +78,6 @@ public class TeleOpMain extends LinearOpMode {
 
 
         armRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        //armRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,armVelocityPid);
-        //mLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,armVelocityPid);
         armLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         /*leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -101,7 +97,7 @@ public class TeleOpMain extends LinearOpMode {
             } else {
                 rightMultiplier = 0.5;
             }
-            leftX = gamepad1.left_stick_x*1.2; // Reverse left joystick's X coordinate
+            leftX = gamepad1.left_stick_x; // Reverse left joystick's X coordinate
             leftY = -gamepad1.left_stick_y; // Reverse left joystick's Y coordinate
             rightX = -gamepad1.right_stick_x * rightMultiplier;
             double speed = Math.hypot(leftX, leftY); // Takes hypotenuse of leftX and leftY
@@ -118,23 +114,12 @@ public class TeleOpMain extends LinearOpMode {
             armPowerOffset = Math.cos(Math.toRadians(armPosAngle))*0.25;
 */
             armPosTicks = armLeft.getCurrentPosition();
-            if(gamepad2.left_stick_y == 0){
-                isSlideJoystickInput = false;
-            } else {
-                isSlideJoystickInput = true;
-            }
-
-            leftStickY = -gamepad2.left_stick_y;
-            slideY = -leftStickY*0.7;
-
-
-
             if(gamepad2.left_bumper && opModeIsActive() && gamepad2.right_stick_y == 0){
                 armY = PID.calculate(0.0015,0,0,armLeft.getCurrentPosition()-targetArmPos,0,0,0,0);
             } else if(gamepad2.right_bumper && opModeIsActive() && gamepad2.right_stick_y == 0){
                 armY = PID.calculate(0.0007,0,0,armLeft.getCurrentPosition()-bottomArmPos,0,0,0,0);
             } else {
-                armY = gamepad2.right_stick_y * 0.5;
+                armY = gamepad2.right_stick_y * 0.2;
             }
 
 
@@ -153,7 +138,7 @@ public class TeleOpMain extends LinearOpMode {
 
             intake.setPower(gamepad2.right_trigger-gamepad2.left_trigger); //Spins the Intake
 
-            slide.setPower(-slideY); // Gives power to the slide
+            slide.setPower(-gamepad2.left_stick_y*0.5); // Gives power to the slide
 
             // Add telemetry variables and updating them
             /*
@@ -170,7 +155,15 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.addData("ArmLeft zeroPowerBehavior",armLeft.getZeroPowerBehavior());
             telemetry.addData("ArmRight zeroPowerBehavior", armRight.getZeroPowerBehavior());
             */
-
+            telemetry.addData("ArmRight Power",armRight.getPower());
+            telemetry.addData("ArmLeft Power",armLeft.getPower());
+            telemetry.addData("Left Arm Motor Encoder",armLeft.getCurrentPosition());
+            telemetry.addData("Right Arm Motor Encoder",armRight.getCurrentPosition());
+            telemetry.addData("Arm y",armY);
+            telemetry.addData("P,I,D (orig)", "%.04f, %.04f, %.0f, %.0f",
+                    pidOrig.p, pidOrig.i, pidOrig.d,pidOrig.f);
+            telemetry.addData("Arm velocity",armLeft.getVelocity());
+            telemetry.addData("Gamepad 2 left stick Y",gamepad2.left_stick_y);
             telemetry.addData("Loop Time",currentTime-lastTime);
             telemetry.update();
             lastTime = currentTime;

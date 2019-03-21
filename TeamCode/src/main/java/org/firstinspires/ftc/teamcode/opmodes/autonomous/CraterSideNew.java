@@ -16,10 +16,13 @@ public class CraterSideNew extends AlmondLinear {
 
         while (opModeIsActive() && isRunning) {
             unlatch();
-            initImu();
+
+
             detectorEnable();
-            globalAngle -= 7;
+
             PIDDrive(-100, -100, -100, -100);
+            initImu();
+
             PIDDrive(250, -250, -250, 250);
             PIDDrive(150, 150, 150, 150);
 
@@ -30,7 +33,8 @@ public class CraterSideNew extends AlmondLinear {
              *
              */
 
-            if (detector.isFound() && detector.getWidth()>35) {
+            globalAngle -= 5;
+            if (detector.isFound() && detector.getFoundRect().width>35&&detector.getFoundRect().y<100) {
                 detector.disable();
                 turn(90); // turns towards gold
                 driveToDistance(22); // pushes gold
@@ -39,7 +43,7 @@ public class CraterSideNew extends AlmondLinear {
 
             } else {
                 turn(30); // turns towards position 2
-                if(detector.isFound() && detector.getWidth()>20){
+                if(detector.isFound() && detector.getFoundRect().width>20&&detector.getFoundRect().y<140){
                     detector.disable();
                     turn(60); // face mid
                     driveToDistance(10); // goes mid way
@@ -75,20 +79,17 @@ public class CraterSideNew extends AlmondLinear {
              * above.
              */
             turn(0);
-            driveToDistance(46.5);
-            turn(-50);
-            turn(0);
+            driveToDistance(48);
+            turn(-55);
             driveToDistance(32);
-            turn(172);
+            turn(170);
             turn(0);
             teamMarker.setPosition(1);
             sleep(300);
-            driveToDistance(50);
+            driveToDistance(59);
 
 
-            slide.setPower(-1);
-            sleep(1000);
-            slide.setPower(0);
+
 
 
 

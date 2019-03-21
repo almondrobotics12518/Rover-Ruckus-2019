@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
+import com.disnodeteam.dogecv.detectors.roverrukus.GoldDetector;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -49,7 +50,7 @@ public abstract class AlmondLinear extends LinearOpMode
     //dogecv detect declaration
 
 
-    public GoldAlignDetector detector;
+    public GoldDetector detector;
 
     /*  -------------------------
         Declare drivetrain motors
@@ -111,6 +112,7 @@ public abstract class AlmondLinear extends LinearOpMode
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        lScrew.setDirection(DcMotorSimple.Direction.REVERSE);
         armRight.setDirection(DcMotorSimple.Direction.REVERSE);
         if (isAuto)
         {
@@ -262,7 +264,7 @@ public abstract class AlmondLinear extends LinearOpMode
         while(opModeIsActive()&&Math.abs(error)>0.1){
             currentAngle = getCurrentAngle();
             if(direction == turnDirection.CLOCKWISE){
-                error = (((target-currentAngle)%360)+360)%360;
+                error = (((target-currentAngle)%360)+360)%360; //errorR
                 if(error>270){
                     error-=360;
                 }
@@ -407,25 +409,15 @@ public abstract class AlmondLinear extends LinearOpMode
         double maxPower=0;
         double origin = leftFront.getCurrentPosition();
 
-        int lfPos;
-        int lbPos;
-        int rfPos;
-        int rbPos;
+        tarLf = leftFront.getCurrentPosition()+lf;
+        tarLb = leftBack.getCurrentPosition()+lb;
+        tarRf = rightFront.getCurrentPosition()+rf;
+        tarRb = rightBack.getCurrentPosition()+rb;
 
-        lfPos = leftFront.getCurrentPosition();
-        lbPos = leftBack.getCurrentPosition();
-        rfPos = rightFront.getCurrentPosition();
-        rbPos = rightBack.getCurrentPosition();
-
-        tarLf = lfPos+lf;
-        tarLb = lbPos+lb;
-        tarRf = rfPos+rf;
-        tarRb = rbPos+rb;
-
-        while(opModeIsActive()&&(Math.abs(lfPos-tarLf)>30||
-                Math.abs(rfPos-tarRf)>30 ||
-                Math.abs(lbPos-tarLb)>30 ||
-                Math.abs(rbPos-tarRb)>30)){
+        while(opModeIsActive()&&(Math.abs(leftFront.getCurrentPosition()-tarLf)>30||
+                Math.abs(rightFront.getCurrentPosition()-tarRf)>30 ||
+                Math.abs(leftBack.getCurrentPosition()-tarLb)>30 ||
+                Math.abs(rightBack.getCurrentPosition()-tarRb)>30)){
 
             maxPower += 0.05;
             if(maxPower>max){
@@ -465,6 +457,8 @@ public abstract class AlmondLinear extends LinearOpMode
             lastErrorRf = errorRf;
             lastErrorRb = errorRb;
 
+
+            telemetry.update();
 
 
         }
@@ -513,13 +507,11 @@ public abstract class AlmondLinear extends LinearOpMode
     public final void detectorEnable()
     {
         // Set up detector
-        detector = new GoldAlignDetector(); // Create detector
+        detector = new GoldDetector(); // Create detector
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(),1,false); // Initialize it with the app context and camera
         detector.useDefaults(); // Set detector to use default settings
 
         // Optional tuning
-        detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned. (Represented by green bars in the preview)
-        detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
         detector.downscale = 0.4; // How much to downscale the input frames
 
         detector.areaScoringMethod = DogeCV.AreaScoringMethod.MAX_AREA; // Can also be PERFECT_AREA

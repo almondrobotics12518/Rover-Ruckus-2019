@@ -28,7 +28,7 @@ public class DepotSideNew extends AlmondLinear {
          */
         globalAngle -= 5;
 
-        if (detector.isFound()&&detector.getWidth()>40) {
+        if (detector.isFound()&&detector.getFoundRect().width>40&&detector.getFoundRect().width<70&&detector.getFoundRect().y<100) {
             detector.disable();
             turn(90);
             driveToDistance(22);
@@ -37,7 +37,7 @@ public class DepotSideNew extends AlmondLinear {
 
         } else {
             turn(30);
-            if(detector.isFound()&&detector.getWidth()>20){
+            if(detector.isFound()&&detector.getFoundRect().width>20&&detector.getFoundRect().width<70&&detector.getFoundRect().y<140){
                 detector.disable();
                 turn(60);
                 driveToDistance(10);
@@ -62,20 +62,17 @@ public class DepotSideNew extends AlmondLinear {
          * above.
          */
 
-        driveToDistance(45);
-        turn(-45);
-        driveToDistance(-52);
+        driveToDistance(48);
+        turn(-50);
+        driveToDistance(-45);
 
         teamMarker.setPosition(1);
         sleep(300);
 
-        driveToDistance(52);
+        driveToDistance(57);
 
 
 
-        slide.setPower(-1);
-        sleep(800);
-        slide.setPower(0);
 
 
 
